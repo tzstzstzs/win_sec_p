@@ -1,30 +1,32 @@
+# src/python/services/user_service.py
 import subprocess
+import json
 
 
-def get_windows_users():
-    # Execute the "net user" command to get the list of users
-    result = subprocess.run(['net', 'user'], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            text=True)
+def get_windows_users_with_powershell():
+    # PowerShell command to get users and their group memberships
+    command = """
+    $users = Get-LocalUser | Where-Object { $_.Enabled -eq $true } | Select-Object Name, Description, Enabled, LastLogon
+    $data = @()
+    foreach ($user in $users) {
+        $groups = Get-LocalGroup | Where-Object { $_.Members -match $user.Name }
+        $groupNames = $groups | Select-Object -ExpandProperty Name
+        $obj = [PSCustomObject]@{
+            Username = $user.Name
+            Description = $user.Description
+            Enabled = $user.Enabled
+            LastLogon = $user.LastLogon
+            Groups = $groupNames -join ', '
+        }
+        $data += $obj
+    }
+    $data | ConvertTo-Json
+    """
+    result = subprocess.run(["powershell", "-Command", command], capture_output=True, text=True)
 
-    # Check for errors
     if result.returncode != 0:
-        raise Exception("Error retrieving users: " + result.stderr)
+        raise Exception("Failed to retrieve users with PowerShell: " + result.stderr)
 
-    # Parse command output
-    users = []
-    output = result.stdout.splitlines()
-
-    # The relevant output starts after the line "-----" and goes until the line "The command completed successfully."
-    start = False
-    for line in output:
-        if '---' in line:
-            start = True
-            continue
-        if 'The command completed' in line:
-            break
-        if start:
-            # Split line by spaces and filter out empty strings
-            line_users = [u.strip() for u in line.split() if u]
-            users.extend(line_users)
-
-    return users
+    # Parse JSON output from PowerShell
+    users_data = json.loads(result.stdout)
+    return users_data
