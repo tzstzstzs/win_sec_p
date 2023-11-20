@@ -32,16 +32,18 @@ class MainWindow(tk.Tk):
         self.show_option2_button = ttk.Button(self.frame2, text='Show Running Processes', command=self.controller.show_processes, state='disabled')
         self.show_option2_button.pack(side=tk.RIGHT)
 
-        # Option 3 - Placeholder for future functionality
-        self.frame3 = ttk.Frame(self)
-        self.frame3.pack(fill=tk.X, padx=5, pady=5)
+        # Option 3 - Check open ports
+        self.checkports_frame = ttk.Frame(self)
+        self.checkports_frame.pack(fill=tk.X, padx=5, pady=5)
 
-        self.option3_var = tk.BooleanVar()
-        self.option3_checkbox = ttk.Checkbutton(self.frame3, text='Option 3', variable=self.option3_var)
-        self.option3_checkbox.pack(side=tk.LEFT)
+        self.checkports_var = tk.BooleanVar()
+        self.checkports_checkbox = ttk.Checkbutton(self.checkports_frame, text='Check Ports',
+                                                   variable=self.checkports_var)
+        self.checkports_checkbox.pack(side=tk.LEFT)
 
-        self.show_option3_button = ttk.Button(self.frame3, text='Show Option 3', command=self.controller.show_option3, state='disabled')
-        self.show_option3_button.pack(side=tk.RIGHT)
+        self.show_checkports_button = ttk.Button(self.checkports_frame, text='Show Open Ports',
+                                                 command=self.controller.show_open_ports, state='disabled')
+        self.show_checkports_button.pack(side=tk.RIGHT)
 
         # Run Button
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
@@ -52,10 +54,14 @@ class MainWindow(tk.Tk):
             self.controller.retrieve_users()
         if self.option2_var.get():
             self.controller.retrieve_processes()
-        # Add logic for option3_var when implemented
+        if self.checkports_var.get():
+            self.controller.check_ports()
 
     def enable_user_list_button(self):
         self.show_user_list_button['state'] = 'normal'
 
     def enable_process_list_button(self):
         self.show_option2_button['state'] = 'normal'
+
+    def enable_checkports_button(self):
+        self.show_checkports_button['state'] = 'normal'
