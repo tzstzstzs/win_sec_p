@@ -13,16 +13,15 @@ def get_windows_users_with_powershell():
     get_users_ps_script_path = os.path.abspath(get_users_ps_script_path)
     with open(get_users_ps_script_path, 'r') as script_file:
         script_content = script_file.read()
-
-    result = subprocess.run(["powershell", "-Command", script_content], capture_output=True, text=True)
-
-    if result.returncode != 0:
-        raise Exception("PowerShell script execution failed.")
-
-    if not result.stdout.strip():
-        raise Exception("PowerShell script returned no output")
+        print(script_content)
 
     try:
+        result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-Command", script_content],
+                                capture_output=True, text=True, encoding='utf-8', errors='ignore')
+
+        if result.returncode != 0:
+            raise Exception(f"PowerShell script execution failed: {result.stderr}")
+
         users_data = json.loads(result.stdout)
         return users_data
     except json.JSONDecodeError as e:

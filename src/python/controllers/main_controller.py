@@ -6,6 +6,7 @@ from src.python.view.process_list_window import ProcessListWindow
 from src.python.models import port_service
 from src.python.view.port_list_window import PortListWindow
 from tkinter import messagebox
+import threading
 
 
 class MainController:
@@ -13,7 +14,7 @@ class MainController:
         self.main_window = MainWindow(self)
         self.users_data = []
         self.processes_data = []
-        self.open_ports_data = None
+        self.open_ports_data = []
 
     def run(self):
         self.main_window.mainloop()
@@ -33,17 +34,37 @@ class MainController:
             messagebox.showerror("Error", f"Unable to retrieve running processes: {e}")
 
     def check_ports(self):
-        # Define the range of ports you want to scan
-        start_port = 20
-        end_port = 100
-        host = '127.0.0.1'  # Local host
-        try:
-            self.open_ports_data = port_service.scan_open_ports(host, start_port, end_port)
-            self.main_window.enable_checkports_button()
-        except KeyboardInterrupt:
-            messagebox.showinfo("Port Scan", "Port scan was cancelled by the user.")
-        except Exception as e:
-            messagebox.showerror("Port Scan", f"An error occurred: {e}")
+        start_port = 8070
+        end_port = 8080
+        host = '127.0.0.1'
+        self.main_window.start_progress(end_port - start_port + 1)
+
+        # Run the scan in a separate thread to prevent UI freezing
+        threading.Thread(
+            target=port_service.run_port_scan,
+            args=(
+                host,
+                start_port,
+                end_port,
+                self.main_window.update_progress,
+                self.complete_port_scan,
+                self.error_port_scan
+            ),
+            daemon=True  # This makes sure the thread will close when the main application exits
+        ).start()
+
+    def complete_port_scan(self, open_ports):
+        # This function will be called once scanning is complete
+        # Since it updates the GUI, it should schedule the changes in the main thread
+        self.open_ports_data = open_ports
+        self.main_window.stop_progress()
+        self.main_window.enable_checkports_button()
+
+    def error_port_scan(self, error):
+        # This function will be called if there's an error during scanning
+        # Error handling code goes here
+        self.main_window.stop_progress()
+        messagebox.showerror("Error", f"Unable to complete port scan: {error}")
 
     def show_users(self):
         if self.users_data:
