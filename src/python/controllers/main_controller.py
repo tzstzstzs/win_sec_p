@@ -10,11 +10,19 @@ import threading
 
 
 class MainController:
-    def __init__(self):
-        self.main_window = MainWindow(self)
+    def __init__(self, main_window):
+        self.main_window = main_window
         self.users_data = []
         self.processes_data = []
         self.open_ports_data = []
+
+        # Set callbacks for MainWindow
+        self.main_window.set_callbacks(
+            self.show_users,
+            self.show_processes,
+            self.show_open_ports,
+            self.run_selected_features
+        )
 
     def run(self):
         self.main_window.mainloop()
@@ -79,3 +87,12 @@ class MainController:
             PortListWindow(self.main_window, self.open_ports_data)
         else:
             messagebox.showinfo("Open Ports", "No open ports found.")
+
+    def run_selected_features(self):
+        # Logic to handle running selected features
+        if self.main_window.option1_var.get():
+            self.retrieve_users()
+        if self.main_window.option2_var.get():
+            self.retrieve_processes()
+        if self.main_window.checkports_var.get():
+            self.check_ports()

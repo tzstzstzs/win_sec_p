@@ -12,14 +12,6 @@ def is_port_open(host, port):
         return False
 
 
-def scan_open_ports(host, start_port, end_port):
-    open_ports = []
-    for port in range(start_port, end_port + 1):
-        if is_port_open(host, port):
-            open_ports.append(port)
-    return open_ports
-
-
 def run_port_scan(host, start_port, end_port, update_callback, complete_callback, error_callback):
     open_ports = []
     try:
