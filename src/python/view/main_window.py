@@ -1,12 +1,17 @@
 import tkinter as tk
 from tkinter import ttk
+from ttkthemes import ThemedTk
 
 
-class MainWindow(tk.Tk):
+class MainWindow(ThemedTk):
     def __init__(self):
-        super().__init__()
+        super().__init__(theme="clearlooks")
         self.title('Windows Security Application')
-        self.geometry('500x300')
+        self.geometry('600x400')
+
+        style = ttk.Style()
+        style.configure('TButton', font=('Helvetica', 12))
+
         self.create_widgets()
         # Callbacks to be set later
         self.on_show_users = None
