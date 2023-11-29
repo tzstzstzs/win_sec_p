@@ -3,6 +3,7 @@ from src.python.models import port_service
 from tkinter import messagebox
 import threading
 
+
 class PortController:
     def __init__(self, main_window):
         self.main_window = main_window
