@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
+from src.python.models.check_user_privileges import is_admin
 
 
 class MainWindow(ThemedTk):
@@ -13,6 +14,8 @@ class MainWindow(ThemedTk):
         style.configure('TButton', font=('Helvetica', 12))
 
         self.create_widgets()
+        self.check_user_status()
+
         # Callbacks to be set later
         self.on_show_users = None
         self.on_show_processes = None
@@ -61,6 +64,10 @@ class MainWindow(ThemedTk):
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
         self.run_button.pack(expand=True, padx=5, pady=5)
 
+        # Textbox for user status
+        self.user_status_textbox = tk.Text(self, height=2, width=50)
+        self.user_status_textbox.pack(pady=10)
+
     def set_callbacks(self, show_users, show_processes, show_open_ports, run_selected_features):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
@@ -106,3 +113,11 @@ class MainWindow(ThemedTk):
         self.progress_bar['value'] = 0
         # Optionally, you can hide the progress bar if the process is done
         # self.progress_bar.pack_forget()
+
+    def check_user_status(self):
+        if is_admin():
+            self.user_status_textbox.insert(tk.END, "The application is running as Admin.")
+            self.user_status_textbox.config(fg='black')
+        else:
+            self.user_status_textbox.insert(tk.END, "Warning: Not all features may be available. Please run as Admin.")
+            self.user_status_textbox.config(fg='red')
