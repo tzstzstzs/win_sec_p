@@ -20,4 +20,4 @@ if __name__ == '__main__':
     else:
         # Relaunch the program with admin rights
         script = os.path.abspath(__file__)
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, script, None, 1)
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", "pythonw", script, None, 1)

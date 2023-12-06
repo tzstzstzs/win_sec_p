@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
 from src.python.models.check_user_privileges import is_admin
+import platform
 
 
 class MainWindow(ThemedTk):
@@ -68,6 +69,10 @@ class MainWindow(ThemedTk):
         self.user_status_textbox = tk.Text(self, height=2, width=50)
         self.user_status_textbox.pack(pady=10)
 
+        # Label for OS version
+        self.os_version_label = ttk.Label(self, text=f"OS Version: {self.get_os_version()}")
+        self.os_version_label.pack(pady=10)
+
     def set_callbacks(self, show_users, show_processes, show_open_ports, run_selected_features):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
@@ -121,3 +126,7 @@ class MainWindow(ThemedTk):
         else:
             self.user_status_textbox.insert(tk.END, "Warning: Not all features may be available. Please run as Admin.")
             self.user_status_textbox.config(fg='red')
+
+    @staticmethod
+    def get_os_version():
+        return platform.version()
