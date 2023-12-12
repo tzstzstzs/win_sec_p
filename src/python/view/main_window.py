@@ -21,6 +21,7 @@ class MainWindow(ThemedTk):
         self.on_show_users = None
         self.on_show_processes = None
         self.on_show_open_ports = None
+        self.on_show_installed_apps = None
         self.on_run_selected_features = None
 
     def create_widgets(self):
@@ -61,6 +62,17 @@ class MainWindow(ThemedTk):
         self.progress_bar = ttk.Progressbar(self, orient='horizontal', mode='determinate')
         self.progress_bar.pack(fill=tk.X, padx=5, pady=5)
 
+        # Option 4 - Installed Applications
+        self.apps_frame = ttk.Frame(self)
+        self.apps_frame.pack(fill=tk.X, padx=5, pady=5)
+
+        self.apps_var = tk.BooleanVar()
+        self.apps_checkbox = ttk.Checkbutton(self.apps_frame, text='Installed Applications', variable=self.apps_var)
+        self.apps_checkbox.pack(side=tk.LEFT)
+
+        self.show_apps_button = ttk.Button(self.apps_frame, text='Show Installed Apps', command=self.show_installed_apps, state='disabled')
+        self.show_apps_button.pack(side=tk.RIGHT)
+
         # Run Button
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
         self.run_button.pack(expand=True, padx=5, pady=5)
@@ -73,10 +85,12 @@ class MainWindow(ThemedTk):
         self.os_version_label = ttk.Label(self, text=f"OS Version: {self.get_os_version()}")
         self.os_version_label.pack(pady=10)
 
-    def set_callbacks(self, show_users, show_processes, show_open_ports, run_selected_features):
+    def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps,
+                      run_selected_features):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
+        self.on_show_installed_apps = show_installed_apps
         self.on_run_selected_features = run_selected_features
 
     def show_users(self):
@@ -91,6 +105,10 @@ class MainWindow(ThemedTk):
         if self.on_show_open_ports:
             self.on_show_open_ports()
 
+    def show_installed_apps(self):
+        if self.on_show_installed_apps:
+            self.on_show_installed_apps()
+
     def run_selected_features(self):
         if self.on_run_selected_features:
             self.on_run_selected_features()
@@ -103,6 +121,9 @@ class MainWindow(ThemedTk):
 
     def enable_checkports_button(self):
         self.show_checkports_button['state'] = 'normal'
+
+    def enable_installed_apps_button(self):
+        self.show_apps_button['state'] = 'normal'
 
     def start_progress(self, max_value):
         self.progress_bar['maximum'] = max_value
