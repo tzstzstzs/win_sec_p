@@ -11,8 +11,7 @@ class InstalledAppsWindow(tk.Toplevel):
         self.create_apps_list()
 
     def create_apps_list(self):
-        self.tree = ttk.Treeview(self)
-        self.tree['columns'] = ('Name', 'Version', 'Vendor', 'InstallDate')
+        self.tree = ttk.Treeview(self, columns=('Name', 'Version', 'Vendor', 'InstallDate'), show='headings')
 
         for col in self.tree['columns']:
             self.tree.column(col, width=150)

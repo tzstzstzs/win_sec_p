@@ -5,7 +5,7 @@ import json
 
 
 def get_windows_users_with_powershell():
-    #TODO: ha nem lehet futtatni a ps file-t vagy commandot, akkor futtasson egy scriptet, amely átállítja a ps script futtatási beállításokat, majd a végén visszaállítja.
+    # TODO: ha nem lehet futtatni a ps file-t vagy commandot, akkor futtasson egy scriptet, amely átállítja a ps script futtatási beállításokat, majd a végén visszaállítja.
 
     # Read the PowerShell script content from the file
     current_dir = os.path.dirname(__file__)
@@ -23,6 +23,11 @@ def get_windows_users_with_powershell():
             raise Exception(f"PowerShell script execution failed: {result.stderr}")
 
         users_data = json.loads(result.stdout)
+
+        # If the data is a dictionary (single user), convert it to a list
+        if isinstance(users_data, dict):
+            users_data = [users_data]
+
         return users_data
     except json.JSONDecodeError as e:
         raise Exception(f"JSON decode error: {e}")

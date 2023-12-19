@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class UserListWindow(tk.Toplevel):
     def __init__(self, parent, users_data):
         super().__init__(parent)
@@ -10,8 +11,8 @@ class UserListWindow(tk.Toplevel):
         self.create_user_list()
 
     def create_user_list(self):
-        self.tree = ttk.Treeview(self)
-        self.tree['columns'] = ('Username', 'Description', 'Enabled', 'LastLogon', 'Groups')
+        self.tree = ttk.Treeview(self, columns=('Username', 'Description', 'Enabled', 'LastLogon', 'Groups'),
+                                 show='headings')
 
         for col in self.tree['columns']:
             self.tree.column(col, width=150)
@@ -23,4 +24,4 @@ class UserListWindow(tk.Toplevel):
     def populate_user_list(self):
         for user in self.users_data:
             self.tree.insert('', tk.END, values=(
-            user['Username'], user['Description'], user['Enabled'], user['LastLogon'], user['Groups']))
+                user['Username'], user['Description'], user['Enabled'], user['LastLogon'], user['Groups']))
