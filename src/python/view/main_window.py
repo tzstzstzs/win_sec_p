@@ -3,6 +3,10 @@ from tkinter import ttk
 from ttkthemes import ThemedTk
 from src.python.models.check_user_privileges import is_admin
 import platform
+from src.python.view.main_window_sections.user_list_section import create_user_list_section
+from src.python.view.main_window_sections.process_list_section import create_process_list_section
+from src.python.view.main_window_sections.port_list_section import create_port_list_section
+from src.python.view.main_window_sections.installed_apps_section import create_installed_apps_section
 
 
 class MainWindow(ThemedTk):
@@ -26,52 +30,16 @@ class MainWindow(ThemedTk):
 
     def create_widgets(self):
         # Option 1 - User List
-        self.frame1 = ttk.Frame(self)
-        self.frame1.pack(fill=tk.X, padx=5, pady=5)
-
-        self.option1_var = tk.BooleanVar()
-        self.option1_checkbox = ttk.Checkbutton(self.frame1, text='User List', variable=self.option1_var)
-        self.option1_checkbox.pack(side=tk.LEFT)
-
-        self.show_user_list_button = ttk.Button(self.frame1, text='Show User List', command=self.show_users,
-                                                state='disabled')
-        self.show_user_list_button.pack(side=tk.RIGHT)
+        self.user_list_frame, self.user_list_var, self.show_user_list_button = create_user_list_section(self, self.show_users)
 
         # Option 2 - Running Processes
-        self.frame2 = ttk.Frame(self)
-        self.frame2.pack(fill=tk.X, padx=5, pady=5)
+        self.process_list_frame, self.process_list_var, self.show_processes_button = create_process_list_section(self, self.show_processes)
 
-        self.option2_var = tk.BooleanVar()
-        self.option2_checkbox = ttk.Checkbutton(self.frame2, text='Running Processes', variable=self.option2_var)
-        self.option2_checkbox.pack(side=tk.LEFT)
-
-        self.show_option2_button = ttk.Button(self.frame2, text='Show Running Processes', command=self.show_processes, state='disabled')
-        self.show_option2_button.pack(side=tk.RIGHT)
-
-        # Option 3 - Check open ports
-        self.checkports_frame = ttk.Frame(self)
-        self.checkports_frame.pack(fill=tk.X, padx=5, pady=5)
-
-        self.checkports_var = tk.BooleanVar()
-        self.checkports_checkbox = ttk.Checkbutton(self.checkports_frame, text='Check Ports', variable=self.checkports_var)
-        self.checkports_checkbox.pack(side=tk.LEFT)
-
-        self.show_checkports_button = ttk.Button(self.checkports_frame, text='Show Open Ports', command=self.show_open_ports, state='disabled')
-        self.show_checkports_button.pack(side=tk.RIGHT)
-
-        self.progress_bar = ttk.Progressbar(self, orient='horizontal', mode='determinate')
-        self.progress_bar.pack(fill=tk.X, padx=5, pady=5)
+        # Option 3 - Check Open Ports and Progress Bar
+        self.checkports_frame, self.checkports_var, self.show_checkports_button, self.progress_bar, self.start_progress, self.stop_progress, self.update_progress = create_port_list_section(self, self.show_open_ports, self.start_progress, self.stop_progress, self.update_progress)
 
         # Option 4 - Installed Applications
-        self.apps_frame = ttk.Frame(self)
-        self.apps_frame.pack(fill=tk.X, padx=5, pady=5)
-
-        self.apps_var = tk.BooleanVar()
-        self.apps_checkbox = ttk.Checkbutton(self.apps_frame, text='Installed Applications', variable=self.apps_var)
-        self.apps_checkbox.pack(side=tk.LEFT)
-
-        self.show_apps_button = ttk.Button(self.apps_frame, text='Show Installed Apps', command=self.show_installed_apps, state='disabled')
-        self.show_apps_button.pack(side=tk.RIGHT)
+        self.apps_frame, self.apps_var, self.show_apps_button = create_installed_apps_section(self, self.show_installed_apps)
 
         # Run Button
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
@@ -117,7 +85,7 @@ class MainWindow(ThemedTk):
         self.show_user_list_button['state'] = 'normal'
 
     def enable_process_list_button(self):
-        self.show_option2_button['state'] = 'normal'
+        self.show_processes_button['state'] = 'normal'
 
     def enable_checkports_button(self):
         self.show_checkports_button['state'] = 'normal'

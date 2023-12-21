@@ -33,9 +33,9 @@ class MainController:
 
     def run_selected_features(self):
         try:
-            if self.main_window.option1_var.get():
+            if self.main_window.user_list_var.get():
                 self.user_controller.retrieve_users()
-            if self.main_window.option2_var.get():
+            if self.main_window.process_list_var.get():
                 self.process_controller.retrieve_processes()
             if self.main_window.checkports_var.get():
                 self.port_controller.check_ports()
