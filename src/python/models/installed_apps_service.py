@@ -2,6 +2,10 @@
 import os
 import subprocess
 import json
+import logging
+
+# Initialize logging
+logging.basicConfig(level=logging.ERROR, filename='installed_apps_error.log')
 
 
 def get_installed_apps():
@@ -28,7 +32,11 @@ def get_installed_apps():
         return apps_data
 
     except subprocess.CalledProcessError as e:
-        raise Exception(f"Subprocess execution failed: {e.stderr}")
-
+        logging.error("PowerShell execution failed", exc_info=True)
+        raise Exception(f"Subprocess execution failed with error: {e.stderr}")
     except json.JSONDecodeError as e:
-        raise Exception(f"JSON decode error: {e}")
+        logging.error("JSON decoding failed", exc_info=True)
+        raise Exception(f"Failed to parse apps data: {e}")
+    except Exception as e:
+        logging.error("Unexpected error occurred in get_installed_apps", exc_info=True)
+        raise Exception(f"Unexpected error: {e}")

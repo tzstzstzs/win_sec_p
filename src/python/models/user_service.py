@@ -1,7 +1,10 @@
-# src/python/services/user_service.py
 import os.path
 import subprocess
 import json
+import logging
+
+# Initialize logging
+logging.basicConfig(level=logging.ERROR, filename='user_service_error.log')
 
 
 def get_windows_users_with_powershell():
@@ -30,5 +33,13 @@ def get_windows_users_with_powershell():
             users_data = [users_data]
 
         return users_data
+
     except json.JSONDecodeError as e:
-        raise Exception(f"JSON decode error: {e}")
+        logging.error(f"JSON decode error: {e}")
+        raise
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Subprocess error: {e}")
+        raise
+    except Exception as e:
+        logging.error(f"Unexpected error: {e}")
+        raise

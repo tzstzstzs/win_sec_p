@@ -1,4 +1,8 @@
 import psutil
+import logging
+
+# Initialize logging
+logging.basicConfig(level=logging.ERROR, filename='processes_error.log')
 
 
 def get_running_processes_with_psutil():
@@ -14,9 +18,13 @@ def get_running_processes_with_psutil():
                 'WorkingSet': proc.info['memory_info'].rss,  # This is in bytes
                 'Parent': f"{parent_name} ({parent_pid})" if parent_pid != 0 else "None"  # Parent process info
             })
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            # Handle any exceptions that might occur due to inaccessible process information
-            pass
+        except psutil.NoSuchProcess:
+            logging.warning(f"Process {proc} no longer exists.")
+        except psutil.AccessDenied:
+            logging.warning(f"Access denied when accessing process {proc}.")
+        except psutil.ZombieProcess:
+            logging.warning(f"Zombie process detected: {proc}.")
+        except Exception as e:
+            logging.error(f"Unexpected error: {e}", exc_info=True)
 
-    print(processes_data)
     return processes_data
