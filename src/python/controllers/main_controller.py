@@ -38,7 +38,7 @@ class MainController:
             if self.main_window.process_list_var.get():
                 self.process_controller.retrieve_processes()
             if self.main_window.checkports_var.get():
-                self.port_controller.check_ports()
+                self.port_controller.retrieve_ports()
             if self.main_window.apps_var.get():
                 self.app_controller.retrieve_installed_apps()
         except Exception as e:
@@ -60,7 +60,7 @@ class MainController:
 
     def show_open_ports(self):
         try:
-            self.port_controller.show_open_ports()
+            self.port_controller.show_ports()
         except Exception as e:
             self.handle_controller_error(e, "open ports")
 

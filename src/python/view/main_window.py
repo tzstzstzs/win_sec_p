@@ -36,7 +36,7 @@ class MainWindow(ThemedTk):
         self.process_list_frame, self.process_list_var, self.show_processes_button = create_process_list_section(self, self.show_processes)
 
         # Option 3 - Check Open Ports and Progress Bar
-        self.checkports_frame, self.checkports_var, self.show_checkports_button, self.progress_bar, self.start_progress, self.stop_progress, self.update_progress = create_port_list_section(self, self.show_open_ports, self.start_progress, self.stop_progress, self.update_progress)
+        self.checkports_frame, self.checkports_var, self.show_checkports_button = create_port_list_section(self, self.show_open_ports)
 
         # Option 4 - Installed Applications
         self.apps_frame, self.apps_var, self.show_apps_button = create_installed_apps_section(self, self.show_installed_apps)
@@ -92,21 +92,6 @@ class MainWindow(ThemedTk):
 
     def enable_installed_apps_button(self):
         self.show_apps_button['state'] = 'normal'
-
-    def start_progress(self, max_value):
-        self.progress_bar['maximum'] = max_value
-        self.progress_bar['value'] = 0
-        # Removed self.progress_bar.start()
-
-    def update_progress(self, value):
-        self.progress_bar['value'] = value
-        self.update_idletasks()  # This will update the UI to reflect the progress
-
-    def stop_progress(self):
-        # Removed self.progress_bar.stop()
-        self.progress_bar['value'] = 0
-        # Optionally, you can hide the progress bar if the process is done
-        # self.progress_bar.pack_forget()
 
     def check_user_status(self):
         if is_admin():

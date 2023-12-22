@@ -1,24 +1,23 @@
-import socket
+import subprocess
+import json
+import os
 
+def get_active_ports_with_powershell():
+    current_dir = os.path.dirname(__file__)
+    script_path = os.path.join(current_dir, '..', '..', 'powershell', 'get_active_ports.ps1')
 
-def is_port_open(host, port):
     try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.settimeout(0.5)  # Timeout for the operation
-            result = sock.connect_ex((host, port))
-            return result == 0  # Returns True if port is open, False otherwise
-    except socket.error as e:
-        print(f"Socket error: {e}")
-        return False
+        result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", script_path],
+                                capture_output=True, text=True)
+        ports_data = json.loads(result.stdout)
 
+        # Handle single object result
+        if isinstance(ports_data, dict):
+            ports_data = [ports_data]
 
-def run_port_scan(host, start_port, end_port, update_callback, complete_callback, error_callback):
-    open_ports = []
-    try:
-        for port in range(start_port, end_port + 1):
-            if is_port_open(host, port):
-                open_ports.append(port)
-            update_callback(port - start_port + 1)
-        complete_callback(open_ports)
+        return ports_data
+    except json.JSONDecodeError as e:
+        raise Exception(f"JSON decode error: {e}")
     except Exception as e:
-        error_callback(e)
+        raise Exception(f"PowerShell script execution error: {e}")
+

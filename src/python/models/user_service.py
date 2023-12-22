@@ -11,6 +11,7 @@ def get_windows_users_with_powershell():
     current_dir = os.path.dirname(__file__)
     get_users_ps_script_path = os.path.join(current_dir, '..', '..', 'powershell', 'get_users.ps1')
     get_users_ps_script_path = os.path.abspath(get_users_ps_script_path)
+
     with open(get_users_ps_script_path, 'r') as script_file:
         script_content = script_file.read()
         print(script_content)
