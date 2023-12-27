@@ -7,13 +7,14 @@ from src.python.view.main_window_sections.user_list_section import create_user_l
 from src.python.view.main_window_sections.process_list_section import create_process_list_section
 from src.python.view.main_window_sections.port_list_section import create_port_list_section
 from src.python.view.main_window_sections.installed_apps_section import create_installed_apps_section
+from src.python.view.main_window_sections.password_policy_section import create_password_policy_section
 
 
 class MainWindow(ThemedTk):
     def __init__(self):
         super().__init__(theme="clearlooks")
         self.title('Windows Security Application')
-        self.geometry('600x400')
+        self.geometry('600x500')
 
         style = ttk.Style()
         style.configure('TButton', font=('Helvetica', 12))
@@ -26,6 +27,7 @@ class MainWindow(ThemedTk):
         self.on_show_processes = None
         self.on_show_open_ports = None
         self.on_show_installed_apps = None
+        self.on_show_password_policy = None
         self.on_run_selected_features = None
 
     def create_widgets(self):
@@ -41,6 +43,9 @@ class MainWindow(ThemedTk):
         # Option 4 - Installed Applications
         self.apps_frame, self.apps_var, self.show_apps_button = create_installed_apps_section(self, self.show_installed_apps)
 
+        # Option 5 - Check Password Policy
+        self.policy_frame, self.policy_var, self.show_policy_button = create_password_policy_section(self,self.show_password_policy)
+
         # Run Button
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
         self.run_button.pack(expand=True, padx=5, pady=5)
@@ -53,12 +58,13 @@ class MainWindow(ThemedTk):
         self.os_version_label = ttk.Label(self, text=f"OS Version: {self.get_os_version()}")
         self.os_version_label.pack(pady=10)
 
-    def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps,
+    def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps, show_password_policy,
                       run_selected_features):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
         self.on_show_installed_apps = show_installed_apps
+        self.on_show_password_policy = show_password_policy
         self.on_run_selected_features = run_selected_features
 
     def show_users(self):
@@ -77,6 +83,10 @@ class MainWindow(ThemedTk):
         if self.on_show_installed_apps:
             self.on_show_installed_apps()
 
+    def show_password_policy(self):
+        if self.on_show_password_policy:
+            self.on_show_password_policy()
+
     def run_selected_features(self):
         if self.on_run_selected_features:
             self.on_run_selected_features()
@@ -89,6 +99,9 @@ class MainWindow(ThemedTk):
 
     def enable_checkports_button(self):
         self.show_checkports_button['state'] = 'normal'
+
+    def enable_password_policy_button(self):
+        self.show_policy_button['state'] = 'normal'
 
     def enable_installed_apps_button(self):
         self.show_apps_button['state'] = 'normal'

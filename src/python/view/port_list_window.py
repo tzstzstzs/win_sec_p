@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class PortListWindow(tk.Toplevel):
     def __init__(self, parent, port_data):
         super().__init__(parent)
@@ -10,7 +11,8 @@ class PortListWindow(tk.Toplevel):
         self.create_port_list()
 
     def create_port_list(self):
-        self.tree = ttk.Treeview(self, columns=('Local Address', 'Local Port', 'Remote Address', 'Remote Port', 'State'),
+        self.tree = ttk.Treeview(self,
+                                 columns=('Local Address', 'Local Port', 'Remote Address', 'Remote Port', 'State'),
                                  show='headings')
 
         for col in self.tree['columns']:

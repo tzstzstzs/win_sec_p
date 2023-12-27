@@ -4,6 +4,7 @@ from src.python.controllers.port_controller import PortController
 from src.python.controllers.process_controller import ProcessController
 from src.python.controllers.user_controller import UserController
 from src.python.controllers.app_controller import AppController
+from src.python.controllers.password_policy_controller import PasswordPolicyController
 
 
 class MainController:
@@ -13,6 +14,7 @@ class MainController:
         self.process_controller = ProcessController(main_window)
         self.port_controller = PortController(main_window)
         self.app_controller = AppController(main_window)
+        self.password_policy_controller = PasswordPolicyController(main_window)
         self.setup_callbacks()
 
     def setup_callbacks(self):
@@ -21,6 +23,7 @@ class MainController:
             self.show_processes,
             self.show_open_ports,
             self.show_installed_apps,
+            self.show_password_policy,
             self.run_selected_features
         )
 
@@ -41,6 +44,8 @@ class MainController:
                 self.port_controller.retrieve_ports()
             if self.main_window.apps_var.get():
                 self.app_controller.retrieve_installed_apps()
+            if self.main_window.policy_var.get():
+                self.password_policy_controller.retrieve_password_policy()
         except Exception as e:
             logging.error(f"Error running selected features: {e}", exc_info=True)
             messagebox.showerror("Error", "An error occurred while running selected features.")
@@ -69,6 +74,12 @@ class MainController:
             self.app_controller.show_installed_apps()
         except Exception as e:
             self.handle_controller_error(e, "installed apps")
+
+    def show_password_policy(self):
+        try:
+            self.password_policy_controller.show_password_policy()
+        except Exception as e:
+            self.handle_controller_error(e, "password policy")
 
     def handle_controller_error(self, error, feature):
         logging.error(f"Error displaying {feature}: {error}", exc_info=True)

@@ -3,8 +3,6 @@ import json
 import os
 import logging
 
-# Initialize logging
-logging.basicConfig(level=logging.ERROR, filename='active_ports_error.log')
 
 def get_active_ports_with_powershell():
     current_dir = os.path.dirname(__file__)
@@ -30,3 +28,7 @@ def get_active_ports_with_powershell():
     except Exception as e:
         logging.error("Unexpected error occurred", exc_info=True)
         raise Exception(f"Unexpected error: {e}")
+
+
+# Initialize logging
+logging.basicConfig(level=logging.ERROR, filename='active_ports_error.log')
