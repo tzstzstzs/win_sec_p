@@ -13,7 +13,7 @@ class PortController:
         logging.info("Attempting to retrieve port data.")
         try:
             self.ports_data = get_active_ports_with_powershell()
-            self.main_window.enable_button(self.main_window.show_checkports_button)
+            self.main_window.enable_button(self.main_window.port_list_section[2])
             logging.info("Successfully retrieved port data.")
         except Exception as e:
             logging.error(f"Failed to retrieve port data: {e}", exc_info=True)

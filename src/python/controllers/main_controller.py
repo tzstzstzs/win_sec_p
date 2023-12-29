@@ -36,15 +36,15 @@ class MainController:
 
     def run_selected_features(self):
         try:
-            if self.main_window.user_list_var.get():
+            if self.main_window.user_list_section[1].get():
                 self.user_controller.retrieve_users()
-            if self.main_window.process_list_var.get():
+            if self.main_window.running_processes_section[1].get():
                 self.process_controller.retrieve_processes()
-            if self.main_window.checkports_var.get():
+            if self.main_window.port_list_section[1].get():
                 self.port_controller.retrieve_ports()
-            if self.main_window.apps_var.get():
+            if self.main_window.installed_apps_section[1].get():
                 self.app_controller.retrieve_installed_apps()
-            if self.main_window.policy_var.get():
+            if self.main_window.password_policy_section[1].get():
                 self.password_policy_controller.retrieve_password_policy()
         except Exception as e:
             logging.error(f"Error running selected features: {e}", exc_info=True)

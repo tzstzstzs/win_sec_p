@@ -13,7 +13,7 @@ class AppController:
         logging.info("Attempting to retrieve installed applications.")
         try:
             self.apps_data = get_installed_apps()
-            self.main_window.enable_button(self.main_window.show_apps_button)
+            self.main_window.enable_button(self.main_window.installed_apps_section[2])
             logging.info("Successfully retrieved installed applications.")
         except Exception as e:
             logging.error(f"Failed to retrieve installed applications: {e}", exc_info=True)

@@ -1,14 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
+from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE
 from src.python.models.check_user_privileges import is_admin
 import platform
-from src.python.view.main_window_sections.user_list_section import create_user_list_section
-from src.python.view.main_window_sections.process_list_section import create_process_list_section
-from src.python.view.main_window_sections.port_list_section import create_port_list_section
-from src.python.view.main_window_sections.installed_apps_section import create_installed_apps_section
-from src.python.view.main_window_sections.password_policy_section import create_password_policy_section
-from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE
+from src.python.view.section_creator import create_section
 
 
 class MainWindow(ThemedTk):
@@ -33,20 +29,15 @@ class MainWindow(ThemedTk):
 
     def create_widgets(self):
 
-        # Option 1 - User List
-        self.user_list_frame, self.user_list_var, self.show_user_list_button = create_user_list_section(self, self.show_users)
-
-        # Option 2 - Running Processes
-        self.process_list_frame, self.process_list_var, self.show_processes_button = create_process_list_section(self, self.show_processes)
-
-        # Option 3 - Check Open Ports and Progress Bar
-        self.checkports_frame, self.checkports_var, self.show_checkports_button = create_port_list_section(self, self.show_open_ports)
-
-        # Option 4 - Installed Applications
-        self.apps_frame, self.apps_var, self.show_apps_button = create_installed_apps_section(self, self.show_installed_apps)
-
-        # Option 5 - Check Password Policy
-        self.policy_frame, self.policy_var, self.show_policy_button = create_password_policy_section(self,self.show_password_policy)
+        sections = [
+            ('User List', self.show_users),
+            ('Running Processes', self.show_processes),
+            ('Port List', self.show_open_ports),
+            ('Installed Apps', self.show_installed_apps),
+            ('Password Policy', self.show_password_policy)
+        ]
+        for title, callback in sections:
+            setattr(self, f"{title.lower().replace(' ', '_')}_section", create_section(self, title, callback))
 
         # Run Button
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
