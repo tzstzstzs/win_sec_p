@@ -8,16 +8,17 @@ from src.python.view.main_window_sections.process_list_section import create_pro
 from src.python.view.main_window_sections.port_list_section import create_port_list_section
 from src.python.view.main_window_sections.installed_apps_section import create_installed_apps_section
 from src.python.view.main_window_sections.password_policy_section import create_password_policy_section
+from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE
 
 
 class MainWindow(ThemedTk):
     def __init__(self):
-        super().__init__(theme="clearlooks")
-        self.title('Windows Security Application')
-        self.geometry('600x500')
+        super().__init__(theme=THEME_NAME)
+        self.title(MAIN_WINDOW_TITLE)
+        self.geometry(WINDOW_SIZE)
 
         style = ttk.Style()
-        style.configure('TButton', font=('Helvetica', 12))
+        style.configure('TButton', **BUTTON_STYLE)
 
         self.create_widgets()
         self.check_user_status()
@@ -31,6 +32,7 @@ class MainWindow(ThemedTk):
         self.on_run_selected_features = None
 
     def create_widgets(self):
+
         # Option 1 - User List
         self.user_list_frame, self.user_list_var, self.show_user_list_button = create_user_list_section(self, self.show_users)
 
@@ -91,20 +93,8 @@ class MainWindow(ThemedTk):
         if self.on_run_selected_features:
             self.on_run_selected_features()
 
-    def enable_user_list_button(self):
-        self.show_user_list_button['state'] = 'normal'
-
-    def enable_process_list_button(self):
-        self.show_processes_button['state'] = 'normal'
-
-    def enable_checkports_button(self):
-        self.show_checkports_button['state'] = 'normal'
-
-    def enable_password_policy_button(self):
-        self.show_policy_button['state'] = 'normal'
-
-    def enable_installed_apps_button(self):
-        self.show_apps_button['state'] = 'normal'
+    def enable_button(self, button):
+        button['state'] = 'normal'
 
     def check_user_status(self):
         if is_admin():

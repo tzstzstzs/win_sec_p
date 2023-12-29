@@ -13,7 +13,7 @@ class ProcessController:
         logging.info("Attempting to retrieve running processes.")
         try:
             self.processes_data = get_running_processes_with_psutil()
-            self.main_window.enable_process_list_button()
+            self.main_window.enable_button(self.main_window.show_processes_button)
             logging.info("Successfully retrieved running processes.")
         except Exception as e:
             logging.error(f"Failed to retrieve running processes: {e}", exc_info=True)

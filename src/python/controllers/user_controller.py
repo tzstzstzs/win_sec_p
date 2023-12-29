@@ -13,7 +13,7 @@ class UserController:
         logging.info("Attempting to retrieve user data.")
         try:
             self.users_data = get_windows_users_with_powershell()
-            self.main_window.enable_user_list_button()
+            self.main_window.enable_button(self.main_window.show_user_list_button)
             logging.info("Successfully retrieved user data.")
         except Exception as e:
             logging.error(f"Failed to retrieve user data: {e}", exc_info=True)

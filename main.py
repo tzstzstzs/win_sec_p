@@ -21,7 +21,7 @@ def is_admin():
 def relaunch_with_admin_rights():
     try:
         script = os.path.abspath(__file__)
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", "python", script, None, 1)
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", "pythonw", script, None, 1)
     except Exception as e:
         logging.error(f"Error relaunching with admin rights: {e}")
         messagebox.showerror("Error", "Failed to relaunch with administrative privileges.")
