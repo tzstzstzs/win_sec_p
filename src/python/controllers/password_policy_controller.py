@@ -3,10 +3,6 @@ from src.python.view.password_policy_window import PasswordPolicyWindow
 from src.python.models.password_policy_service import get_password_policy
 from tkinter import messagebox
 
-# Initialize logging at the start of the application
-logging.basicConfig(level=logging.INFO, filename='password.log', filemode='a',
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
 
 class PasswordPolicyController:
     def __init__(self, main_window):
@@ -14,12 +10,12 @@ class PasswordPolicyController:
         self.policy_data = []
 
     def retrieve_password_policy(self):
-        logging.info("Attempting to retrieve password policy.")
+        logging.info("Attempting to retrieve password policy [controller].")
         try:
             self.policy_data = get_password_policy()
             self.main_window.enable_button(self.main_window.password_policy_section[2])
             # Trigger any UI update or enablement here
-            logging.info("Successfully retrieved password policy.")
+            logging.info("Successfully retrieved password policy [controller].")
         except Exception as e:
             logging.error(f"Failed to retrieve password policy: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving password policy: {e}")

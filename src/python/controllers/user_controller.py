@@ -10,11 +10,11 @@ class UserController:
         self.users_data = []
 
     def retrieve_users(self):
-        logging.info("Attempting to retrieve user data.")
+        logging.info("Attempting to retrieve user data [controller].")
         try:
             self.users_data = get_windows_users_with_powershell()
             self.main_window.enable_button(self.main_window.user_list_section[2])
-            logging.info("Successfully retrieved user data.")
+            logging.info("Successfully retrieved user data [controller].")
         except Exception as e:
             logging.error(f"Failed to retrieve user data: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving user data: {e}")
@@ -29,8 +29,3 @@ class UserController:
         else:
             logging.warning("No user data available to display.")
             messagebox.showinfo("User List", "No user data available.")
-
-
-# Initialize logging at the start of the application
-logging.basicConfig(level=logging.INFO, filename='user.log', filemode='a',
-                    format='%(asctime)s - %(levelname)s - %(message)s')

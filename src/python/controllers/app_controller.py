@@ -10,11 +10,11 @@ class AppController:
         self.apps_data = []
 
     def retrieve_installed_apps(self):
-        logging.info("Attempting to retrieve installed applications.")
+        logging.info("Attempting to retrieve installed applications [controller].")
         try:
             self.apps_data = get_installed_apps()
             self.main_window.enable_button(self.main_window.installed_apps_section[2])
-            logging.info("Successfully retrieved installed applications.")
+            logging.info("Successfully retrieved installed applications [controller].")
         except Exception as e:
             logging.error(f"Failed to retrieve installed applications: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving installed applications: {e}")
@@ -29,8 +29,3 @@ class AppController:
         else:
             logging.warning("No installed applications data available to display.")
             messagebox.showinfo("Installed Apps", "No installed applications data available.")
-
-
-# Initialize logging at the start of the application
-logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a',
-                    format='%(asctime)s - %(levelname)s - %(message)s')

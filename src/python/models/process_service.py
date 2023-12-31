@@ -1,9 +1,6 @@
 import psutil
 import logging
 
-# Initialize logging
-logging.basicConfig(level=logging.ERROR, filename='processes_error.log')
-
 
 def get_running_processes_with_psutil():
     processes_data = []
@@ -27,4 +24,5 @@ def get_running_processes_with_psutil():
         except Exception as e:
             logging.error(f"Unexpected error: {e}", exc_info=True)
 
+    logging.info("Running processes list retrieved [service]")
     return processes_data

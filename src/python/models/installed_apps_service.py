@@ -4,9 +4,6 @@ import subprocess
 import json
 import logging
 
-# Initialize logging
-logging.basicConfig(level=logging.ERROR, filename='installed_apps_error.log')
-
 
 def get_installed_apps():
     # Define the PowerShell script path
@@ -29,6 +26,7 @@ def get_installed_apps():
 
         # Process the output
         apps_data = json.loads(result.stdout)
+        logging.info("Installed apps data retrieved [service]")
         return apps_data
 
     except subprocess.CalledProcessError as e:

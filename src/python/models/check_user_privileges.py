@@ -1,11 +1,10 @@
 import ctypes
 import logging
 
-logging.basicConfig(level=logging.ERROR, filename='admin_check.log')
-
 
 def is_admin():
     try:
+        logging.info("Successfully checked admin status.")
         return ctypes.windll.shell32.IsUserAnAdmin()
     except Exception as e:
         logging.error("Failed to check admin status: %s", str(e))

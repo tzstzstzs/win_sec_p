@@ -5,17 +5,10 @@ from tkinter import messagebox
 
 from src.python.controllers.main_controller import MainController
 from src.python.view.main_window import MainWindow
+from src.python.models.check_user_privileges import is_admin
 
-# Setup logging
-logging.basicConfig(level=logging.ERROR, filename='error.log')
-
-
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except Exception as e:
-        logging.error(f"Error checking admin status: {e}")
-        return False
+# Configure the root logger
+logging.basicConfig(filename='application.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 def relaunch_with_admin_rights():
@@ -32,6 +25,7 @@ if __name__ == '__main__':
         try:
             main_window = MainWindow()
             main_controller = MainController(main_window)
+            logging.info("Application launched")
             main_controller.run()
         except Exception as e:
             logging.error(f"Unhandled exception: {e}")

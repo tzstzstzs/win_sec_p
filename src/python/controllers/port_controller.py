@@ -10,11 +10,11 @@ class PortController:
         self.ports_data = []
 
     def retrieve_ports(self):
-        logging.info("Attempting to retrieve port data.")
+        logging.info("Attempting to retrieve port data [controller].")
         try:
             self.ports_data = get_active_ports_with_powershell()
             self.main_window.enable_button(self.main_window.port_list_section[2])
-            logging.info("Successfully retrieved port data.")
+            logging.info("Successfully retrieved port data [controller].")
         except Exception as e:
             logging.error(f"Failed to retrieve port data: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving port data: {e}")
@@ -29,8 +29,3 @@ class PortController:
         else:
             logging.warning("No port data available to display.")
             messagebox.showinfo("Port List", "No port data available.")
-
-
-# Initialize logging at the start of the application
-logging.basicConfig(level=logging.INFO, filename='port.log', filemode='a',
-                    format='%(asctime)s - %(levelname)s - %(message)s')

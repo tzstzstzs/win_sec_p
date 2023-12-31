@@ -17,6 +17,7 @@ def get_active_ports_with_powershell():
         if isinstance(ports_data, dict):
             ports_data = [ports_data]
 
+        logging.info("Ports data retrieved [service]")
         return ports_data
 
     except json.JSONDecodeError as e:
@@ -28,7 +29,3 @@ def get_active_ports_with_powershell():
     except Exception as e:
         logging.error("Unexpected error occurred", exc_info=True)
         raise Exception(f"Unexpected error: {e}")
-
-
-# Initialize logging
-logging.basicConfig(level=logging.ERROR, filename='active_ports_error.log')
