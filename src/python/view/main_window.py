@@ -8,8 +8,9 @@ from src.python.view.section_creator import create_section
 
 
 class MainWindow(ThemedTk):
-    def __init__(self):
+    def __init__(self, admin_status = False):
         super().__init__(theme=THEME_NAME)
+        self.admin_status = admin_status
         self.title(MAIN_WINDOW_TITLE)
         self.geometry(WINDOW_SIZE)
 
@@ -88,7 +89,7 @@ class MainWindow(ThemedTk):
         button['state'] = 'normal'
 
     def check_user_status(self):
-        if is_admin():
+        if self.admin_status:
             self.user_status_textbox.insert(tk.END, "The application is running as Admin.")
             self.user_status_textbox.config(fg='black')
         else:

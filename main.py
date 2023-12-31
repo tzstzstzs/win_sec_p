@@ -21,9 +21,10 @@ def relaunch_with_admin_rights():
 
 
 if __name__ == '__main__':
-    if is_admin():
+    admin_status = is_admin()
+    if admin_status:
         try:
-            main_window = MainWindow()
+            main_window = MainWindow(admin_status = admin_status)
             main_controller = MainController(main_window)
             logging.info("Application launched")
             main_controller.run()

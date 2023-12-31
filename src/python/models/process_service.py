@@ -16,13 +16,13 @@ def get_running_processes_with_psutil():
                 'Parent': f"{parent_name} ({parent_pid})" if parent_pid != 0 else "None"  # Parent process info
             })
         except psutil.NoSuchProcess:
-            logging.warning(f"Process {proc} no longer exists.")
+            logging.warning(f"Process {proc} no longer exists [service].")
         except psutil.AccessDenied:
-            logging.warning(f"Access denied when accessing process {proc}.")
+            logging.warning(f"Access denied when accessing process {proc} [service].")
         except psutil.ZombieProcess:
-            logging.warning(f"Zombie process detected: {proc}.")
+            logging.warning(f"Zombie process detected [service]: {proc}.")
         except Exception as e:
-            logging.error(f"Unexpected error: {e}", exc_info=True)
+            logging.error(f"Unexpected error [service]: {e}", exc_info=True)
 
     logging.info("Running processes list retrieved [service]")
     return processes_data

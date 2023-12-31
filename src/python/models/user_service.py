@@ -20,7 +20,7 @@ def get_windows_users_with_powershell():
                                 capture_output=True, text=True, encoding='utf-8', errors='ignore')
 
         if result.returncode != 0:
-            logging.error(f"PowerShell script execution failed: {result.stderr}")
+            logging.error(f"PowerShell script execution failed [service]: {result.stderr}")
             raise Exception(f"PowerShell script execution failed: {result.stderr}")
 
         users_data = json.loads(result.stdout)
@@ -34,11 +34,11 @@ def get_windows_users_with_powershell():
         return users_data
 
     except json.JSONDecodeError as e:
-        logging.error(f"JSON decode error: {e}")
+        logging.error(f"JSON decode error [service]: {e}")
         raise
     except subprocess.CalledProcessError as e:
-        logging.error(f"Subprocess error: {e}")
+        logging.error(f"Subprocess error [service]: {e}")
         raise
     except Exception as e:
-        logging.error(f"Unexpected error: {e}")
+        logging.error(f"Unexpected error [service]: {e}")
         raise

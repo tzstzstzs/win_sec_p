@@ -16,7 +16,7 @@ class PortController:
             self.main_window.enable_button(self.main_window.port_list_section[2])
             logging.info("Successfully retrieved port data [controller].")
         except Exception as e:
-            logging.error(f"Failed to retrieve port data: {e}", exc_info=True)
+            logging.error(f"Failed to retrieve port data [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving port data: {e}")
 
     def show_ports(self):
@@ -24,8 +24,8 @@ class PortController:
             try:
                 PortListWindow(self.main_window, self.ports_data)
             except Exception as e:
-                logging.error(f"Error displaying port list: {e}", exc_info=True)
+                logging.error(f"Error displaying port list [controller]: {e}", exc_info=True)
                 messagebox.showerror("Error", "An error occurred while displaying the port list.")
         else:
-            logging.warning("No port data available to display.")
+            logging.warning("No port data available to display [controller].")
             messagebox.showinfo("Port List", "No port data available.")

@@ -21,11 +21,11 @@ def get_active_ports_with_powershell():
         return ports_data
 
     except json.JSONDecodeError as e:
-        logging.error("JSON decoding failed", exc_info=True)
+        logging.error("JSON decoding failed [service]", exc_info=True)
         raise Exception(f"Failed to parse ports data: {e}")
     except subprocess.CalledProcessError as e:
-        logging.error("PowerShell script execution failed", exc_info=True)
+        logging.error("PowerShell script execution failed [service]", exc_info=True)
         raise Exception(f"PowerShell script execution error: {e.stderr}")
     except Exception as e:
-        logging.error("Unexpected error occurred", exc_info=True)
+        logging.error("Unexpected error occurred [service]", exc_info=True)
         raise Exception(f"Unexpected error: {e}")

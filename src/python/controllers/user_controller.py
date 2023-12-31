@@ -16,7 +16,7 @@ class UserController:
             self.main_window.enable_button(self.main_window.user_list_section[2])
             logging.info("Successfully retrieved user data [controller].")
         except Exception as e:
-            logging.error(f"Failed to retrieve user data: {e}", exc_info=True)
+            logging.error(f"Failed to retrieve user data [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving user data: {e}")
 
     def show_users(self):
@@ -24,8 +24,8 @@ class UserController:
             try:
                 UserListWindow(self.main_window, self.users_data)
             except Exception as e:
-                logging.error(f"Error displaying user list: {e}", exc_info=True)
+                logging.error(f"Error displaying user list [controller]: {e}", exc_info=True)
                 messagebox.showerror("Error", "An error occurred while displaying the user list.")
         else:
-            logging.warning("No user data available to display.")
+            logging.warning("No user data available to display [controller].")
             messagebox.showinfo("User List", "No user data available.")

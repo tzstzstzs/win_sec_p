@@ -17,7 +17,7 @@ class PasswordPolicyController:
             # Trigger any UI update or enablement here
             logging.info("Successfully retrieved password policy [controller].")
         except Exception as e:
-            logging.error(f"Failed to retrieve password policy: {e}", exc_info=True)
+            logging.error(f"Failed to retrieve password policy [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving password policy: {e}")
 
     def show_password_policy(self):
@@ -25,8 +25,8 @@ class PasswordPolicyController:
             try:
                 PasswordPolicyWindow(self.main_window, self.policy_data)
             except Exception as e:
-                logging.error(f"Error displaying password policy: {e}", exc_info=True)
+                logging.error(f"Error displaying password policy [controller]: {e}", exc_info=True)
                 messagebox.showerror("Error", "An error occurred while displaying the password policy.")
         else:
-            logging.warning("No password policy data available to display.")
+            logging.warning("No password policy data available to display [controller].")
             messagebox.showinfo("Password Policy", "No password policy data available.")

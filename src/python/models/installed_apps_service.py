@@ -30,11 +30,11 @@ def get_installed_apps():
         return apps_data
 
     except subprocess.CalledProcessError as e:
-        logging.error("PowerShell execution failed", exc_info=True)
+        logging.error("PowerShell execution failed [service]", exc_info=True)
         raise Exception(f"Subprocess execution failed with error: {e.stderr}")
     except json.JSONDecodeError as e:
-        logging.error("JSON decoding failed", exc_info=True)
+        logging.error("JSON decoding failed [service]", exc_info=True)
         raise Exception(f"Failed to parse apps data: {e}")
     except Exception as e:
-        logging.error("Unexpected error occurred in get_installed_apps", exc_info=True)
+        logging.error("Unexpected error occurred in get_installed_apps [service]", exc_info=True)
         raise Exception(f"Unexpected error: {e}")

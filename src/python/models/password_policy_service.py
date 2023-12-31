@@ -15,5 +15,5 @@ def get_password_policy():
         logging.info("Password policy data retrieved [service]")
         return policy_data
     except Exception as e:
-        logging.error("Error retrieving password policy", exc_info=True)
+        logging.error("Error retrieving password policy [service]", exc_info=True)
         raise

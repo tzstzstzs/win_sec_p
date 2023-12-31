@@ -16,16 +16,16 @@ class AppController:
             self.main_window.enable_button(self.main_window.installed_apps_section[2])
             logging.info("Successfully retrieved installed applications [controller].")
         except Exception as e:
-            logging.error(f"Failed to retrieve installed applications: {e}", exc_info=True)
-            messagebox.showerror("Error", f"An error occurred while retrieving installed applications: {e}")
+            logging.error(f"Failed to retrieve installed applications [controller]: {e}", exc_info=True)
+            messagebox.showerror("Error", f"An error occurred while retrieving installed applications [controller]: {e}")
 
     def show_installed_apps(self):
         if self.apps_data:
             try:
                 InstalledAppsWindow(self.main_window, self.apps_data)
             except Exception as e:
-                logging.error(f"Error displaying installed applications: {e}", exc_info=True)
+                logging.error(f"Error displaying installed applications [controller]: {e}", exc_info=True)
                 messagebox.showerror("Error", "An error occurred while displaying installed applications.")
         else:
-            logging.warning("No installed applications data available to display.")
+            logging.warning("No installed applications data available to display [controller].")
             messagebox.showinfo("Installed Apps", "No installed applications data available.")
