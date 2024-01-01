@@ -5,6 +5,7 @@ from src.python.controllers.process_controller import ProcessController
 from src.python.controllers.user_controller import UserController
 from src.python.controllers.app_controller import AppController
 from src.python.controllers.password_policy_controller import PasswordPolicyController
+from src.python.controllers.updates_controller import UpdatesController
 
 
 class MainController:
@@ -15,6 +16,7 @@ class MainController:
         self.port_controller = PortController(main_window)
         self.app_controller = AppController(main_window)
         self.password_policy_controller = PasswordPolicyController(main_window)
+        self.updates_controller = UpdatesController(main_window)
         self.setup_callbacks()
 
     def setup_callbacks(self):
@@ -24,6 +26,7 @@ class MainController:
             self.show_open_ports,
             self.show_installed_apps,
             self.show_password_policy,
+            self.show_installed_updates,
             self.run_selected_features
         )
 
@@ -46,6 +49,8 @@ class MainController:
                 self.app_controller.retrieve_installed_apps()
             if self.main_window.password_policy_section[1].get():
                 self.password_policy_controller.retrieve_password_policy()
+            if self.main_window.installed_updates_section[1].get():
+                self.updates_controller.retrieve_updates()
         except Exception as e:
             logging.error(f"Error running selected features: {e}", exc_info=True)
             messagebox.showerror("Error", "An error occurred while running selected features.")
@@ -80,6 +85,12 @@ class MainController:
             self.password_policy_controller.show_password_policy()
         except Exception as e:
             self.handle_controller_error(e, "password policy")
+
+    def show_installed_updates(self):
+        try:
+            self.updates_controller.show_updates()
+        except Exception as e:
+            self.handle_controller_error(e, "installed updates")
 
     def handle_controller_error(self, error, feature):
         logging.error(f"Error displaying {feature}: {error}", exc_info=True)

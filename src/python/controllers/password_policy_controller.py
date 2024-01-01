@@ -14,7 +14,6 @@ class PasswordPolicyController:
         try:
             self.policy_data = get_password_policy()
             self.main_window.enable_button(self.main_window.password_policy_section[2])
-            # Trigger any UI update or enablement here
             logging.info("Successfully retrieved password policy [controller].")
         except Exception as e:
             logging.error(f"Failed to retrieve password policy [controller]: {e}", exc_info=True)

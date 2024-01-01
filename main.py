@@ -24,7 +24,7 @@ if __name__ == '__main__':
     admin_status = is_admin()
     if admin_status:
         try:
-            main_window = MainWindow(admin_status = admin_status)
+            main_window = MainWindow(admin_status=admin_status)
             main_controller = MainController(main_window)
             logging.info("Application launched")
             main_controller.run()
