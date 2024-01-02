@@ -14,13 +14,18 @@ class PortListWindow(tk.Toplevel):
         self.tree = ttk.Treeview(self,
                                  columns=('Local Address', 'Local Port', 'Remote Address', 'Remote Port', 'State'),
                                  show='headings')
+        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
+        self.tree.configure(yscrollcommand=self.vsb.set)
 
         for col in self.tree['columns']:
             self.tree.column(col, width=120)
             self.tree.heading(col, text=col)
 
-        self.tree.pack(fill=tk.BOTH, expand=True)
         self.populate_port_list()
+
+        # Pack (or grid) the treeview and scrollbar
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
 
     def populate_port_list(self):
         for port in self.port_data:

@@ -12,13 +12,18 @@ class InstalledAppsWindow(tk.Toplevel):
 
     def create_apps_list(self):
         self.tree = ttk.Treeview(self, columns=('Name', 'Version', 'Vendor', 'InstallDate'), show='headings')
+        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
+        self.tree.configure(yscrollcommand=self.vsb.set)
 
         for col in self.tree['columns']:
             self.tree.column(col, width=150)
             self.tree.heading(col, text=col)
 
-        self.tree.pack(fill=tk.BOTH, expand=True)
         self.populate_apps_list()
+
+        # Pack (or grid) the treeview and scrollbar
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
 
     def populate_apps_list(self):
         for app in self.apps_data:

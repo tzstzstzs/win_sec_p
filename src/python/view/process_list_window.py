@@ -6,19 +6,24 @@ class ProcessListWindow(tk.Toplevel):
     def __init__(self, parent, processes_data):
         super().__init__(parent)
         self.title('Running Processes')
-        self.geometry('1000x600')
+        self.geometry('1200x600')
         self.processes_data = processes_data
         self.create_process_list()
 
     def create_process_list(self):
         self.tree = ttk.Treeview(self, columns=('Name', 'Id', 'CPU', 'WorkingSet', 'Parent'), show='headings')
+        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
+        self.tree.configure(yscrollcommand=self.vsb.set)
 
         for col in self.tree['columns']:
             self.tree.column(col, width=200)
             self.tree.heading(col, text=col)
 
-        self.tree.pack(fill=tk.BOTH, expand=True)
         self.populate_process_list()
+
+        # Pack (or grid) the treeview and scrollbar
+        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
 
     def populate_process_list(self):
         # Create a dictionary to store parent processes
