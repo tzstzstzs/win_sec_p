@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from src.python.view.sort_utils import sort_by  # Import the sort_by function
 
 
 class PasswordPolicyWindow(tk.Toplevel):
@@ -8,6 +9,8 @@ class PasswordPolicyWindow(tk.Toplevel):
         self.title('Password Policy')
         self.geometry('800x600')
         self.policy_data = policy_data
+        # Initialize sort order for all columns
+        self.sort_order = {col: True for col in ('Policy', 'Setting')}
         self.create_policy_list()
 
     def create_policy_list(self):
@@ -17,15 +20,16 @@ class PasswordPolicyWindow(tk.Toplevel):
 
         for col in self.tree['columns']:
             self.tree.column(col, width=250)
-            self.tree.heading(col, text=col)
+            # Attach the sorting function to column headers
+            self.tree.heading(col, text=col, command=lambda _col=col: self.on_column_click(_col))
 
         self.populate_policy_list()
-
-        # Pack (or grid) the treeview and scrollbar
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
+
+    def on_column_click(self, col):
+        self.sort_order = sort_by(self.tree, col, self.sort_order)
 
     def populate_policy_list(self):
         for idx, policy in enumerate(self.policy_data, 1):
             self.tree.insert('', tk.END, values=(f"{policy['Line']}. {policy['Key']}", policy['Value']))
-

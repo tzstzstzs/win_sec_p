@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from src.python.view.sort_utils import sort_by  # Import the sort_by function
 
 
 class UpdateListWindow(tk.Toplevel):
@@ -8,6 +9,8 @@ class UpdateListWindow(tk.Toplevel):
         self.title('Installed Updates List')
         self.geometry('1400x600')
         self.updates_data = updates_data
+        # Initialize sort order for all columns
+        self.sort_order = {col: True for col in ('PropertyDescription', 'HotFixID', 'InstalledOn', 'InstalledBy')}
         self.create_update_list()
 
     def create_update_list(self):
@@ -17,18 +20,19 @@ class UpdateListWindow(tk.Toplevel):
         self.tree.configure(yscrollcommand=self.vsb.set)
 
         for col in self.tree['columns']:
-            self.tree.column(col, width=250)  # Adjust width as needed
-            self.tree.heading(col, text=col)
+            self.tree.column(col, width=250)
+            # Attach the sorting function to column headers
+            self.tree.heading(col, text=col, command=lambda _col=col: self.on_column_click(_col))
 
         self.populate_update_list()
-
-        # Pack (or grid) the treeview and scrollbar
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
 
+    def on_column_click(self, col):
+        self.sort_order = sort_by(self.tree, col, self.sort_order)
+
     def populate_update_list(self):
         for update in self.updates_data:
-            # Ensure that these keys align with how your updates data is structured
             self.tree.insert('', tk.END, values=(
                 update.get('HotFixID', 'N/A'), update.get('Description', 'N/A'),
                 update.get('InstalledOn', 'N/A'), update.get('InstalledBy', 'N/A')))

@@ -17,7 +17,14 @@ def get_active_ports_with_powershell():
         if isinstance(ports_data, dict):
             ports_data = [ports_data]
 
-        logging.info("Ports data retrieved [service]")
+        # Convert port numbers to integers
+        for port in ports_data:
+            if 'LocalPort' in port:  # Assuming 'LocalPort' is a key in the dictionaries
+                port['LocalPort'] = int(port['LocalPort'])
+            if 'RemotePort' in port:  # Assuming 'RemotePort' is a key in the dictionaries
+                port['RemotePort'] = int(port['RemotePort'])
+
+        logging.info("Ports data retrieved [service]    ")
         return ports_data
 
     except json.JSONDecodeError as e:

@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-
+from src.python.view.sort_utils import sort_by
 
 class ProcessListWindow(tk.Toplevel):
     def __init__(self, parent, processes_data):
@@ -8,6 +8,8 @@ class ProcessListWindow(tk.Toplevel):
         self.title('Running Processes')
         self.geometry('1200x600')
         self.processes_data = processes_data
+        # Initialize sort order for all columns
+        self.sort_order = {col: True for col in ('Name', 'Id', 'CPU', 'WorkingSet', 'Parent')}
         self.create_process_list()
 
     def create_process_list(self):
@@ -17,13 +19,15 @@ class ProcessListWindow(tk.Toplevel):
 
         for col in self.tree['columns']:
             self.tree.column(col, width=200)
-            self.tree.heading(col, text=col)
+            # Attach the sorting function to column headers
+            self.tree.heading(col, text=col, command=lambda _col=col: self.on_column_click(_col))
 
         self.populate_process_list()
-
-        # Pack (or grid) the treeview and scrollbar
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
+
+    def on_column_click(self, col):
+        self.sort_order = sort_by(self.tree, col, self.sort_order)
 
     def populate_process_list(self):
         # Create a dictionary to store parent processes
