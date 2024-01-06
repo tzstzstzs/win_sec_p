@@ -15,9 +15,11 @@ class PasswordPolicyController:
             self.policy_data = get_password_policy()
             self.main_window.enable_button(self.main_window.password_policy_section[2])
             logging.info("Successfully retrieved password policy [controller].")
+            return self.policy_data
         except Exception as e:
             logging.error(f"Failed to retrieve password policy [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving password policy: {e}")
+            return None
 
     def show_password_policy(self):
         if self.policy_data:

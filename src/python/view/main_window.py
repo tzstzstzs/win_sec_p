@@ -27,6 +27,7 @@ class MainWindow(ThemedTk):
         self.on_show_password_policy = None
         self.on_show_installed_updates = None
         self.on_run_selected_features = None
+        self.on_export_data = None
 
     def create_widgets(self):
         style = ttk.Style()
@@ -50,6 +51,10 @@ class MainWindow(ThemedTk):
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
         self.run_button.pack(expand=True, padx=5, pady=5)
 
+        # Export Button
+        self.export_button = ttk.Button(self, text="Export to DOCX", command=self.export_data)
+        self.export_button.pack(expand=True, padx=5, pady=5)
+
         # Textbox for user status
         self.user_status_textbox = tk.Text(self, height=2, width=50)
         self.user_status_textbox.pack(pady=10)
@@ -59,7 +64,7 @@ class MainWindow(ThemedTk):
         self.os_version_label.pack(pady=10)
 
     def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps, show_password_policy,
-                      show_installed_updates, run_selected_features):
+                      show_installed_updates, run_selected_features, export_data):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
@@ -67,6 +72,7 @@ class MainWindow(ThemedTk):
         self.on_show_password_policy = show_password_policy
         self.on_show_installed_updates = show_installed_updates
         self.on_run_selected_features = run_selected_features
+        self.on_export_data = export_data
 
     def show_users(self):
         if self.on_show_users:
@@ -102,6 +108,10 @@ class MainWindow(ThemedTk):
     def run_selected_features(self):
         if self.on_run_selected_features:
             self.on_run_selected_features()
+
+    def export_data(self):
+        if self.on_export_data:
+            self.on_export_data()
 
     def enable_button(self, button):
         button['state'] = 'normal'

@@ -15,9 +15,11 @@ class PortController:
             self.ports_data = get_active_ports_with_powershell()
             self.main_window.enable_button(self.main_window.port_list_section[2])
             logging.info("Successfully retrieved port data [controller].")
+            return self.ports_data
         except Exception as e:
             logging.error(f"Failed to retrieve port data [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving port data: {e}")
+            return None
 
     def show_ports(self):
         if self.ports_data:

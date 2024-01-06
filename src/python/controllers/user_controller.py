@@ -15,9 +15,11 @@ class UserController:
             self.users_data = get_windows_users_with_powershell()
             self.main_window.enable_button(self.main_window.user_list_section[2])
             logging.info("Successfully retrieved user data [controller].")
+            return self.users_data
         except Exception as e:
             logging.error(f"Failed to retrieve user data [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving user data: {e}")
+            return None
 
     def show_users(self):
         if self.users_data:

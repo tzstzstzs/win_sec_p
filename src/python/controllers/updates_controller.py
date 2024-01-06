@@ -15,9 +15,11 @@ class UpdatesController:
             self.updates_data = get_installed_updates_with_powershell()
             self.main_window.enable_button(self.main_window.installed_updates_section[2])
             logging.info("Successfully retrieved updates data [controller].")
+            return self.updates_data
         except Exception as e:
             logging.error(f"Failed to retrieve updates data [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving updates data: {e}")
+            return None
 
     def show_updates(self):
         if self.updates_data:

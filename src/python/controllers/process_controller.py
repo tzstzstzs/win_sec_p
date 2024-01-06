@@ -15,9 +15,11 @@ class ProcessController:
             self.processes_data = get_running_processes_with_psutil()
             self.main_window.enable_button(self.main_window.running_processes_section[2])
             logging.info("Successfully retrieved running processes [controller].")
+            return self.processes_data
         except Exception as e:
             logging.error(f"Failed to retrieve running processes [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving running processes: {e}")
+            return None
 
     def show_processes(self):
         if self.processes_data:

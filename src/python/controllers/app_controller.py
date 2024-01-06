@@ -15,9 +15,11 @@ class AppController:
             self.apps_data = get_installed_apps()
             self.main_window.enable_button(self.main_window.installed_apps_section[2])
             logging.info("Successfully retrieved installed applications [controller].")
+            return self.apps_data
         except Exception as e:
             logging.error(f"Failed to retrieve installed applications [controller]: {e}", exc_info=True)
             messagebox.showerror("Error", f"An error occurred while retrieving installed applications [controller]: {e}")
+            return None
 
     def show_installed_apps(self):
         if self.apps_data:
