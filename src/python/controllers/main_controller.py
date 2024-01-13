@@ -22,6 +22,7 @@ class MainController:
         self.setup_callbacks()
 
         self.data_store = {}
+        self.result = {}
 
     def setup_callbacks(self):
         self.main_window.set_callbacks(
@@ -31,6 +32,12 @@ class MainController:
             self.show_installed_apps,
             self.show_password_policy,
             self.show_installed_updates,
+            self.show_users_result,
+            self.show_processes_result,
+            self.show_open_ports_result,
+            self.show_installed_apps_result,
+            self.show_password_policy_result,
+            self.show_installed_updates_result,
             self.run_selected_features,
             self.handle_export
         )
@@ -48,7 +55,6 @@ class MainController:
                 users = self.user_controller.retrieve_users()
                 if users is not None:
                     self.data_store['User List'] = users
-                print("Stored User List: ", self.data_store['User List'])
             if self.main_window.running_processes_section[1].get():
                 processes = self.process_controller.retrieve_processes()
                 if processes is not None:
@@ -68,7 +74,7 @@ class MainController:
             if self.main_window.installed_updates_section[1].get():
                 updates = self.updates_controller.retrieve_updates()
                 if updates is not None:
-                    self.data_store['Password Policy'] = updates
+                    self.data_store['Installed Updates'] = updates
         except Exception as e:
             logging.error(f"Error running selected features: {e}", exc_info=True)
             messagebox.showerror("Error", "An error occurred while running selected features.")
@@ -80,11 +86,17 @@ class MainController:
         except Exception as e:
             self.handle_controller_error(e, "users")
 
+    def show_users_result(self):
+        pass
+
     def show_processes(self):
         try:
             self.process_controller.show_processes()
         except Exception as e:
             self.handle_controller_error(e, "processes")
+
+    def show_processes_result(self):
+        pass
 
     def show_open_ports(self):
         try:
@@ -92,11 +104,17 @@ class MainController:
         except Exception as e:
             self.handle_controller_error(e, "open ports")
 
+    def show_open_ports_result(self):
+        pass
+
     def show_installed_apps(self):
         try:
             self.app_controller.show_installed_apps()
         except Exception as e:
             self.handle_controller_error(e, "installed apps")
+
+    def show_installed_apps_result(self):
+        pass
 
     def show_password_policy(self):
         try:
@@ -104,11 +122,17 @@ class MainController:
         except Exception as e:
             self.handle_controller_error(e, "password policy")
 
+    def show_password_policy_result(self):
+        pass
+
     def show_installed_updates(self):
         try:
             self.updates_controller.show_updates()
         except Exception as e:
             self.handle_controller_error(e, "installed updates")
+
+    def show_installed_updates_result(self):
+        pass
 
     def handle_export(self):
         self.export_controller.export_data()

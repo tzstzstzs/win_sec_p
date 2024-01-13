@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
-from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE
+from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE, ICON_PATH
 import platform
 from src.python.view.section_creator import create_section
 
@@ -26,26 +26,61 @@ class MainWindow(ThemedTk):
         self.on_show_installed_apps = None
         self.on_show_password_policy = None
         self.on_show_installed_updates = None
+
+        self.on_show_users_result = None
+        self.on_show_processes_result = None
+        self.on_show_open_ports_result = None
+        self.on_show_installed_apps_result = None
+        self.on_show_password_policy_result = None
+        self.on_show_installed_updates_result = None
+
         self.on_run_selected_features = None
         self.on_export_data = None
 
     def create_widgets(self):
         style = ttk.Style()
         style.configure('Bold.TCheckbutton', font=('Helvetica', 10, 'bold'))
-        self.select_all_var = tk.BooleanVar(value=False)
-        self.select_all_checkbox = ttk.Checkbutton(self, text="Select All", variable=self.select_all_var,command=self.toggle_select_all, style='Bold.TCheckbutton')
-        self.select_all_checkbox.pack(anchor='w', padx=5, pady=10)
+
+        # Create a frame to hold both checkboxes
+        select_all_frame = ttk.Frame(self)
+        select_all_frame.pack(fill='x', padx=5, pady=10)
+
+        # Select All for Analyze Checkboxes
+        self.select_all_analyze_var = tk.BooleanVar(value=False)
+        self.select_all_analyze_checkbox = ttk.Checkbutton(
+            select_all_frame, text="", variable=self.select_all_analyze_var,
+            command=lambda: self.toggle_select_all(self.select_all_analyze_var, retrieve=False),
+            style='Bold.TCheckbutton')
+
+        # Select All for Analyze Checkboxes
+        self.select_all_analyze_var = tk.BooleanVar(value=False)
+        self.select_all_analyze_checkbox = ttk.Checkbutton(
+            select_all_frame, text="", variable=self.select_all_analyze_var,
+            command=lambda: self.toggle_select_all(self.select_all_analyze_var, retrieve=False),
+            style='Bold.TCheckbutton')
+        self.select_all_analyze_checkbox.pack(side='right', padx=55)
+
+        # Select All for Retrieve Checkboxes
+        self.select_all_retrieve_var = tk.BooleanVar(value=False)
+        self.select_all_retrieve_checkbox = ttk.Checkbutton(
+            select_all_frame, text="", variable=self.select_all_retrieve_var,
+            command=lambda: self.toggle_select_all(self.select_all_retrieve_var, retrieve=True),
+            style='Bold.TCheckbutton')
+        self.select_all_retrieve_checkbox.pack(side='right', padx=153)
 
         sections = [
-            ('User List', self.show_users),
-            ('Running Processes', self.show_processes),
-            ('Port List', self.show_open_ports),
-            ('Installed Apps', self.show_installed_apps),
-            ('Password Policy', self.show_password_policy),
-            ('Installed Updates', self.show_installed_updates)
+            ('User List', self.show_users, self.show_users_result),
+            ('Running Processes', self.show_processes, self.show_processes_result),
+            ('Port List', self.show_open_ports, self.show_open_ports_result),
+            ('Installed Apps', self.show_installed_apps, self.show_installed_updates_result),
+            ('Password Policy', self.show_password_policy, self.show_password_policy_result),
+            ('Installed Updates', self.show_installed_updates, self.show_installed_updates_result)
         ]
-        for title, callback in sections:
-            setattr(self, f"{title.lower().replace(' ', '_')}_section", create_section(self, title, callback))
+
+        for title, data_callback, result_callback in sections:
+            section = create_section(self, title, data_callback, result_callback, ICON_PATH)
+            setattr(self, f"{title.lower().replace(' ', '_')}_section", section)
+            print(section)
 
         # Run Button
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
@@ -64,13 +99,19 @@ class MainWindow(ThemedTk):
         self.os_version_label.pack(pady=10)
 
     def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps, show_password_policy,
-                      show_installed_updates, run_selected_features, export_data):
+                      show_installed_updates, show_users_result, show_processes_result, show_open_ports_result, show_installed_apps_result, show_password_policy_result, show_installed_updates_result, run_selected_features, export_data):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
         self.on_show_installed_apps = show_installed_apps
         self.on_show_password_policy = show_password_policy
         self.on_show_installed_updates = show_installed_updates
+        self.on_show_users_result = show_users_result
+        self.on_show_processes_result = show_processes_result
+        self.on_show_open_ports_result = show_open_ports_result
+        self.on_show_installed_apps_result = show_installed_apps_result
+        self.on_show_password_policy_result = show_password_policy_result
+        self.on_show_installed_updates_result = show_installed_updates_result
         self.on_run_selected_features = run_selected_features
         self.on_export_data = export_data
 
@@ -78,31 +119,55 @@ class MainWindow(ThemedTk):
         if self.on_show_users:
             self.on_show_users()
 
+    def show_users_result(self):
+        if self.on_show_users_result:
+            self.on_show_users_result()
+
     def show_processes(self):
         if self.on_show_processes:
             self.on_show_processes()
+
+    def show_processes_result(self):
+        if self.on_show_processes_result:
+            self.on_show_processes_result()
 
     def show_open_ports(self):
         if self.on_show_open_ports:
             self.on_show_open_ports()
 
+    def show_open_ports_result(self):
+        if self.on_show_open_ports_result:
+            self.on_show_open_ports_result()
+
     def show_installed_apps(self):
         if self.on_show_installed_apps:
             self.on_show_installed_apps()
+
+    def show_installed_apps_result(self):
+        if self.on_show_installed_apps_result:
+            self.on_show_installed_apps_result()
 
     def show_password_policy(self):
         if self.on_show_password_policy:
             self.on_show_password_policy()
 
+    def show_password_policy_result(self):
+        if self.on_show_password_policy_result:
+            self.on_show_password_policy_result()
+
     def show_installed_updates(self):
         if self.on_show_installed_updates:
             self.on_show_installed_updates()
 
-    def toggle_select_all(self):
-        is_selected = self.select_all_var.get()
-        for section in ['user_list', 'running_processes', 'port_list', 'installed_apps', 'password_policy',
-                        'installed_updates']:
-            section_var = getattr(self, f"{section}_section")[1]
+    def show_installed_updates_result(self):
+        if self.on_show_installed_updates_result:
+            self.on_show_installed_updates_result()
+
+    def toggle_select_all(self, select_all_var, retrieve):
+        is_selected = select_all_var.get()
+        for section in ['user_list', 'running_processes', 'port_list', 'installed_apps', 'password_policy', 'installed_updates']:
+            section_obj = getattr(self, f"{section}_section")
+            section_var = section_obj[1] if retrieve else section_obj[3]  # retrieve checkbox if retrieve=True else analyze checkbox
             section_var.set(is_selected)
 
     def run_selected_features(self):
