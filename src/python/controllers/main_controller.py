@@ -5,6 +5,7 @@ from src.python.controllers.process_controller import ProcessController
 from src.python.controllers.user_controller import UserController
 from src.python.controllers.app_controller import AppController
 from src.python.controllers.password_policy_controller import PasswordPolicyController
+from src.python.controllers.password_policy_analysis_controller import PasswordPolicyAnalysisController
 from src.python.controllers.updates_controller import UpdatesController
 from src.python.controllers.export_controller import ExportController
 
@@ -17,6 +18,7 @@ class MainController:
         self.port_controller = PortController(main_window)
         self.app_controller = AppController(main_window)
         self.password_policy_controller = PasswordPolicyController(main_window)
+        self.password_policy_analysis_controller = PasswordPolicyAnalysisController(main_window)
         self.updates_controller = UpdatesController(main_window)
         self.export_controller = ExportController(main_window, self)
         self.setup_callbacks()
@@ -71,6 +73,11 @@ class MainController:
                 password_policy = self.password_policy_controller.retrieve_password_policy()
                 if password_policy is not None:
                     self.data_store['Password Policy'] = password_policy
+                    if self.main_window.password_policy_section[3].get():
+                        password_policy_result = self.password_policy_analysis_controller.perform_password_policy_analysis(password_policy)
+                        if password_policy_result is not None:
+                            self.result['Password Policy Result'] = password_policy_result
+                            print(password_policy_result)
             if self.main_window.installed_updates_section[1].get():
                 updates = self.updates_controller.retrieve_updates()
                 if updates is not None:
@@ -123,7 +130,10 @@ class MainController:
             self.handle_controller_error(e, "password policy")
 
     def show_password_policy_result(self):
-        pass
+        try:
+            self.password_policy_analysis_controller.show_password_policy_analysis()
+        except Exception as e:
+            self.handle_controller_error(e, "password policy analysis")
 
     def show_installed_updates(self):
         try:
