@@ -136,7 +136,6 @@ class MainController:
 
     def handle_export(self):
         self.export_controller.export_data()
-        print(self.data_store)
 
     def handle_controller_error(self, error, feature):
         logging.error(f"Error displaying {feature}: {error}", exc_info=True)

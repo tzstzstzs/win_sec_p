@@ -13,9 +13,9 @@ def create_section(parent, title, show_data_callback, show_result_callback, icon
     ttk.Label(frame, text=title).pack(side='left', padx=5)
 
     img = Image.open(icon_path)
-    img = img.resize((15, 15), Image.Resampling.LANCZOS)
+    img = img.resize((20, 20), Image.Resampling.LANCZOS)
     img = ImageTk.PhotoImage(img)
-    display_result_button = ttk.Button(frame, image=img, command=show_result_callback)
+    display_result_button = ttk.Button(frame, image=img, command=show_result_callback, state='disabled')
     display_result_button.image = img  # keep a reference!
     display_result_button.pack(side='right', padx=(5, 5))
 
@@ -24,9 +24,9 @@ def create_section(parent, title, show_data_callback, show_result_callback, icon
     ttk.Label(frame, text="Analyze:").pack(side='right', padx=(5, 0))
 
     img = Image.open(icon_path)
-    img = img.resize((15, 15), Image.Resampling.LANCZOS)
+    img = img.resize((20, 20), Image.Resampling.LANCZOS)
     img = ImageTk.PhotoImage(img)
-    display_data_button = ttk.Button(frame, image=img, command=show_data_callback)
+    display_data_button = ttk.Button(frame, image=img, command=show_data_callback, state='disabled')
     display_data_button.image = img  # keep a reference!
     display_data_button.pack(side='right', padx=(5, 100))
 

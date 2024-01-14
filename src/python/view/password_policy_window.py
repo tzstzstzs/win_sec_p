@@ -9,18 +9,16 @@ class PasswordPolicyWindow(tk.Toplevel):
         self.title('Password Policy')
         self.geometry('800x600')
         self.policy_data = policy_data
-        # Initialize sort order for all columns
-        self.sort_order = {col: True for col in ('Policy', 'Setting')}
+        self.sort_order = {col: True for col in ('Policy', 'Value')}
         self.create_policy_list()
 
     def create_policy_list(self):
-        self.tree = ttk.Treeview(self, columns=('Policy', 'Setting'), show='headings')
+        self.tree = ttk.Treeview(self, columns=('Index', 'Policy', 'Value'), show='headings')
         self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.vsb.set)
 
         for col in self.tree['columns']:
             self.tree.column(col, width=250)
-            # Attach the sorting function to column headers
             self.tree.heading(col, text=col, command=lambda _col=col: self.on_column_click(_col))
 
         self.populate_policy_list()
@@ -31,5 +29,5 @@ class PasswordPolicyWindow(tk.Toplevel):
         self.sort_order = sort_by(self.tree, col, self.sort_order)
 
     def populate_policy_list(self):
-        for idx, policy in enumerate(self.policy_data, 1):
-            self.tree.insert('', tk.END, values=(f"{policy['Line']}. {policy['Key']}", policy['Value']))
+        for policy in self.policy_data:
+            self.tree.insert('', tk.END, values=(policy['Index'], policy['Policy'], policy['Value']))
