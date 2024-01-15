@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkthemes import ThemedTk
-from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE, ICON_PATH
+from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE, ARROW_ICON_PATH
 import platform
 from src.python.view.section_creator import create_section
 
@@ -78,7 +78,7 @@ class MainWindow(ThemedTk):
         ]
 
         for title, data_callback, result_callback in sections:
-            section = create_section(self, title, data_callback, result_callback, ICON_PATH)
+            section = create_section(self, title, data_callback, result_callback, ARROW_ICON_PATH)
             setattr(self, f"{title.lower().replace(' ', '_')}_section", section)
             print(section)
 

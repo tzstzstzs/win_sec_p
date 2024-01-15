@@ -1,5 +1,5 @@
 import logging
-from src.python.view.password_policy_result_window import PasswordPolicyResultWindow
+from src.python.view.password_policy_analysis_window import PasswordPolicyResultWindow
 from src.python.models.password_policy_analysis_service import PasswordPolicyAnalysisService
 from tkinter import messagebox
 
