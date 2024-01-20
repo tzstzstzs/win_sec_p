@@ -41,7 +41,8 @@ class MainController:
             self.show_password_policy_result,
             self.show_installed_updates_result,
             self.run_selected_features,
-            self.handle_export
+            self.handle_export,
+            self.open_password_policy_settings
         )
 
     def run(self):
@@ -69,15 +70,7 @@ class MainController:
                 apps = self.app_controller.retrieve_installed_apps()
                 if apps is not None:
                     self.data_store['Installed Apps'] = apps
-            if self.main_window.password_policy_section[1].get():
-                password_policy = self.password_policy_controller.retrieve_password_policy()
-                if password_policy is not None:
-                    self.data_store['Password Policy'] = password_policy
-                    if self.main_window.password_policy_section[3].get():
-                        password_policy_result = self.password_policy_analysis_controller.perform_password_policy_analysis(password_policy)
-                        if password_policy_result is not None:
-                            self.result['Password Policy Result'] = password_policy_result
-                            print(password_policy_result)
+            self.handle_password_policy()
             if self.main_window.installed_updates_section[1].get():
                 updates = self.updates_controller.retrieve_updates()
                 if updates is not None:
@@ -85,6 +78,23 @@ class MainController:
         except Exception as e:
             logging.error(f"Error running selected features: {e}", exc_info=True)
             messagebox.showerror("Error", "An error occurred while running selected features.")
+
+    def handle_password_policy(self):
+        if not self.main_window.password_policy_section[1].get():
+            return
+        password_policy = self.password_policy_controller.retrieve_password_policy()
+        if password_policy is None:
+            return
+        self.data_store['Password Policy'] = password_policy
+        if not self.main_window.password_policy_section[3].get():
+            return
+        self.analyze_password_policy(password_policy)
+
+    def analyze_password_policy(self, password_policy):
+        password_policy_result = self.password_policy_analysis_controller.perform_password_policy_analysis(
+            password_policy)
+        if password_policy_result is not None:
+            self.result['Password Policy Result'] = password_policy_result
 
     # Wrapper functions for controllers
     def show_users(self):
@@ -128,6 +138,12 @@ class MainController:
             self.password_policy_controller.show_password_policy()
         except Exception as e:
             self.handle_controller_error(e, "password policy")
+
+    def open_password_policy_settings(self):
+        try:
+            self.password_policy_analysis_controller.open_password_policy_settings()
+        except Exception as e:
+            self.handle_controller_error(e, "password policy settings")
 
     def show_password_policy_result(self):
         try:

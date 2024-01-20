@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
+from src.python.view.style_config import ARROW_ICON_PATH, COGWHEEL_ICON_PATH
 
 
-def create_section(parent, title, show_data_callback, show_result_callback, icon_path):
+def create_section(parent, title, show_data_callback, show_result_callback, open_settings_callback):
     frame = ttk.Frame(parent)
     frame.pack(fill='x', padx=5, pady=5)
 
@@ -12,7 +13,7 @@ def create_section(parent, title, show_data_callback, show_result_callback, icon
 
     ttk.Label(frame, text=title).pack(side='left', padx=5)
 
-    img = Image.open(icon_path)
+    img = Image.open(ARROW_ICON_PATH)
     img = img.resize((20, 20), Image.Resampling.LANCZOS)
     img = ImageTk.PhotoImage(img)
     display_result_button = ttk.Button(frame, image=img, command=show_result_callback, state='disabled')
@@ -23,7 +24,14 @@ def create_section(parent, title, show_data_callback, show_result_callback, icon
     analyze_checkbox.pack(side='right', padx=(0, 0))
     ttk.Label(frame, text="Analyze:").pack(side='right', padx=(5, 0))
 
-    img = Image.open(icon_path)
+    img = Image.open(COGWHEEL_ICON_PATH)
+    img = img.resize((20, 20), Image.Resampling.LANCZOS)
+    img = ImageTk.PhotoImage(img)
+    settings_button = ttk.Button(frame, image=img, command=open_settings_callback, state='enabled')
+    settings_button.image = img  # keep a reference!
+    settings_button.pack(side='right', padx=(0, 5))
+
+    img = Image.open(ARROW_ICON_PATH)
     img = img.resize((20, 20), Image.Resampling.LANCZOS)
     img = ImageTk.PhotoImage(img)
     display_data_button = ttk.Button(frame, image=img, command=show_data_callback, state='disabled')
