@@ -38,6 +38,7 @@ class MainWindow(ThemedTk):
 
         self.on_run_selected_features = None
         self.on_export_data = None
+        self.on_export_result = None
 
     def create_widgets(self):
         style = ttk.Style()
@@ -88,9 +89,13 @@ class MainWindow(ThemedTk):
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
         self.run_button.pack(expand=True, padx=5, pady=5)
 
-        # Export Button
-        self.export_button = ttk.Button(self, text="Export to DOCX", command=self.export_data)
-        self.export_button.pack(expand=True, padx=5, pady=5)
+        # Export Data Button
+        self.export_data_button = ttk.Button(self, text="Export Data", command=self.export_data)
+        self.export_data_button.pack(expand=True, padx=5, pady=5)
+
+        # Export Result Button
+        self.export_result_button = ttk.Button(self, text="Export Result", command=self.export_result)
+        self.export_result_button.pack(expand=True, padx=5, pady=5)
 
         # Textbox for user status
         self.user_status_textbox = tk.Text(self, height=2, width=50)
@@ -101,7 +106,7 @@ class MainWindow(ThemedTk):
         self.os_version_label.pack(pady=10)
 
     def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps, show_password_policy,
-                      show_installed_updates, show_users_result, show_processes_result, show_open_ports_result, show_installed_apps_result, show_password_policy_result, show_installed_updates_result, run_selected_features, export_data, open_password_policy_settings):
+                      show_installed_updates, show_users_result, show_processes_result, show_open_ports_result, show_installed_apps_result, show_password_policy_result, show_installed_updates_result, run_selected_features, export_data, open_password_policy_settings, export_result):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
@@ -117,6 +122,7 @@ class MainWindow(ThemedTk):
         self.on_run_selected_features = run_selected_features
         self.on_export_data = export_data
         self.on_open_password_policy_settings = open_password_policy_settings
+        self.on_export_result = export_result
     def show_users(self):
         if self.on_show_users:
             self.on_show_users()
@@ -184,6 +190,10 @@ class MainWindow(ThemedTk):
     def export_data(self):
         if self.on_export_data:
             self.on_export_data()
+
+    def export_result(self):
+        if self.on_export_result:
+            self.on_export_result()
 
     def enable_button(self, button):
         button['state'] = 'normal'

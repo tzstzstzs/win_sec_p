@@ -1,25 +1,29 @@
 import tkinter as tk
 from tkinter import ttk
 from src.python.view.sort_utils import sort_by
+import logging
+
 
 class ProcessListWindow(tk.Toplevel):
     def __init__(self, parent, processes_data):
         super().__init__(parent)
         self.title('Running Processes')
-        self.geometry('1200x600')
+        self.geometry('1400x600')  # Adjusted for additional columns
         self.processes_data = processes_data
-        # Initialize sort order for all columns
-        self.sort_order = {col: True for col in ('Name', 'Id', 'CPU', 'WorkingSet', 'Parent')}
+        self.sort_order = {col: True for col in ('ProcessName', 'Id', 'CPU', 'WorkingSet', 'Parent', 'ExecutablePath', 'AssociatedUser')}
         self.create_process_list()
 
+        # Bind the treeview click event
+        self.tree.bind('<ButtonRelease-1>', self.on_tree_click)
+
     def create_process_list(self):
-        self.tree = ttk.Treeview(self, columns=('Name', 'Id', 'CPU', 'WorkingSet', 'Parent'), show='headings')
+        columns = ('ProcessName', 'Id', 'CPU', 'WorkingSet', 'Parent', 'ExecutablePath', 'AssociatedUser')
+        self.tree = ttk.Treeview(self, columns=columns, show='headings')
         self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.vsb.set)
 
-        for col in self.tree['columns']:
-            self.tree.column(col, width=200)
-            # Attach the sorting function to column headers
+        for col in columns:
+            self.tree.column(col, width=200 if col in ['ExecutablePath', 'AssociatedUser'] else 100)
             self.tree.heading(col, text=col, command=lambda _col=col: self.on_column_click(_col))
 
         self.populate_process_list()
@@ -29,31 +33,37 @@ class ProcessListWindow(tk.Toplevel):
     def on_column_click(self, col):
         self.sort_order = sort_by(self.tree, col, self.sort_order)
 
+    def on_tree_click(self, event):
+        # Get the item clicked
+        item_id = self.tree.identify_row(event.y)
+        if item_id:
+            # Get the item's values
+            item_values = self.tree.item(item_id, 'values')
+            # Format the values as a string
+            text_to_copy = ', '.join(map(str, item_values))
+            # Copy the text to clipboard
+            self.clipboard_clear()
+            self.clipboard_append(text_to_copy)
+            logging.info(f"Copied to clipboard: {text_to_copy}")
+
     def populate_process_list(self):
-        # Create a dictionary to store parent processes
         parent_nodes = {}
 
         for proc in self.processes_data:
-            parent_id = proc['Parent']
-            proc_id = proc['Id']
+            try:
+                parent_id = proc.get('ParentId', None)
+                proc_id = proc.get('Id', None)
 
-            # If the process has a parent, and the parent is not already in the tree, add it
-            if parent_id and parent_id not in parent_nodes:
-                parent_info = next((p for p in self.processes_data if p['Id'] == parent_id), None)
-                if parent_info:
-                    parent_node = self.tree.insert('', tk.END, text=parent_info['Name'],
-                                                   values=(parent_info['Name'], parent_info['Id'],
-                                                           parent_info['CPU'], parent_info['WorkingSet'],
-                                                           'N/A'))  # Parent of the parent is 'N/A'
-                    parent_nodes[parent_id] = parent_node
+                working_set_mb = 0
+                if proc.get('WorkingSet') is not None:
+                    working_set_mb = proc['WorkingSet'] / (1024 * 1024)
 
-            # Insert the process either as a child of its parent or as a top-level item
-            if parent_id and parent_id in parent_nodes:
-                self.tree.insert(parent_nodes[parent_id], tk.END, text=proc['Name'],
-                                 values=(proc['Name'], proc['Id'], proc['CPU'],
-                                         proc['WorkingSet'], parent_id))
-            else:
-                self.tree.insert('', tk.END, text=proc['Name'],
-                                 values=(proc['Name'], proc['Id'], proc['CPU'],
-                                         proc['WorkingSet'],
-                                         parent_id or 'N/A'))  # 'N/A' for processes without a parent
+                self.tree.insert('', tk.END, text=proc.get('ProcessName', ''),
+                                 values=(proc.get('ProcessName', ''), proc_id, proc.get('CPU', ''),
+                                         f"{working_set_mb:.2f} MB",
+                                         parent_id or 'N/A',
+                                         proc.get('ExecutablePath', 'N/A'),
+                                         proc.get('AssociatedUser', 'N/A')))
+            except Exception as e:
+                logging.error(f"Error processing process data: {e}", exc_info=True)
+

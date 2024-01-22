@@ -16,9 +16,9 @@ class PasswordPolicyAnalysisController:
             'max_age': '90',
             'min_age': '1',
             'history': '5',
-            'lockout_threshold': 5,
-            'lockout_duration': 30,
-            'lockout_obs_win': 30
+            'lockout_threshold': '5',
+            'lockout_duration': '30',
+            'lockout_obs_win': '30'
         }
         # Dictionary to store actual settings
         self.password_policy_settings = {}

@@ -42,7 +42,8 @@ class MainController:
             self.show_installed_updates_result,
             self.run_selected_features,
             self.handle_export,
-            self.open_password_policy_settings
+            self.open_password_policy_settings,
+            self.export_result
         )
 
     def run(self):
@@ -162,6 +163,9 @@ class MainController:
 
     def handle_export(self):
         self.export_controller.export_data()
+
+    def export_result(self):
+        self.export_controller.export_result()
 
     def handle_controller_error(self, error, feature):
         logging.error(f"Error displaying {feature}: {error}", exc_info=True)
