@@ -1,3 +1,4 @@
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $processInfo = Get-Process
 $combinedInfo = foreach ($p in $processInfo) {
     # Get the WMI object for the specific process

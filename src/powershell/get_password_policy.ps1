@@ -1,3 +1,4 @@
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $policy = net accounts
 $counter = 1
 $json = $policy | ForEach-Object {

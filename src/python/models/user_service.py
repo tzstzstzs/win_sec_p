@@ -2,6 +2,7 @@ import os.path
 import subprocess
 import json
 import logging
+import locale
 
 
 def get_windows_users_with_powershell():
@@ -16,14 +17,17 @@ def get_windows_users_with_powershell():
         script_content = script_file.read()
 
     try:
+        locale.getpreferredencoding(False)
         result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-Command", script_content],
                                 capture_output=True, text=True, encoding='utf-8', errors='ignore')
 
         if result.returncode != 0:
             logging.error(f"PowerShell script execution failed [service]: {result.stderr}")
             raise Exception(f"PowerShell script execution failed: {result.stderr}")
-
+        print(result.stdout)
+        print("\n\n")
         users_data = json.loads(result.stdout)
+        print(users_data)
 
         # If the data is a dictionary (single user), convert it to a list
         if isinstance(users_data, dict):

@@ -52,27 +52,27 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_logoff_time(self, logoff_time):
         try:
+            req_logoff_time = int(self.settings.get('logoff_time', 30))
             logoff_time = int(logoff_time)  # Convert history to an integer
-            required_logoff_time = int(self.settings.get('logoff_time', 30))
         except ValueError as e:
             logging.error("Invalid data - Force logoff time is not a number", exc_info=True)
-            history = 0
+            return f"Not Compliant - Force logoff time should be at least {req_logoff_time} minutes"
         except Exception as e:
             logging.error("Unexpected error in _analyze_logoff_time", exc_info=True)
             return "Error analyzing force logoff time"
 
-        if logoff_time <= required_logoff_time:
+        if logoff_time <= req_logoff_time:
             return "Compliant"
         else:
-            return f"Not Compliant - Force logoff time should be at least {required_logoff_time} minutes"
+            return f"Not Compliant - Force logoff time should be at least {req_logoff_time} minutes"
 
     def _analyze_length(self, length):
         try:
-            length = int(length)
             required_length = int(self.settings.get('min_length', 8))  # Use the setting, default to 8 if not set
+            length = int(length)
         except ValueError as e:
             logging.error("Invalid data - Password length or setting is not a number [service]", exc_info=True)
-            return "Invalid data - Password length or setting is not a number"
+            return f"Not Compliant - Minimum password length should be at least {required_length} characters"
         except Exception as e:
             logging.error("Unexpected error in _analyze_length [service]", exc_info=True)
             return "Error analyzing password length"
@@ -83,11 +83,11 @@ class PasswordPolicyAnalysisService:
             return f"Not Compliant - Minimum password length should be at least {required_length} characters"
     def _analyze_max_age(self, age):
         try:
-            age = int(age)  # Convert age to an integer
             required_max_age = int(self.settings.get('max_age', 90))
+            age = int(age)  # Convert age to an integer
         except ValueError as e:
             logging.error("Invalid data - Password age is not a number [service]", exc_info=True)
-            return "Invalid data - Password age is not a number"
+            return f"Not Compliant - Maximum password age should not exceed {required_max_age} days"
         except Exception as e:
             logging.error("Unexpected error in _analyze_max_age [service]", exc_info=True)
             return "Error analyzing password max age"
@@ -99,11 +99,11 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_min_age(self, age):
         try:
-            age = int(age)  # Convert length to an integer
             required_min_age = int(self.settings.get('min_age', 1))
+            age = int(age)  # Convert length to an integer
         except ValueError as e:
             logging.error("Invalid data - Password age is not a number [service]", exc_info=True)
-            return "Invalid data - Password age is not a number"
+            return f"Not Compliant - Minimum password age should be at least {required_min_age} day"
         except Exception as e:
             logging.error("Unexpected error in _analyze_min_age [service]", exc_info=True)
             return "Error analyzing password max age"
@@ -115,11 +115,11 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_history(self, history):
         try:
-            history = int(history)
             required_history = int(self.settings.get('history', 5))
+            history = int(history)
         except ValueError as e:
             logging.error("Invalid data - Password history is not a number", exc_info=True)
-            history = 0
+            return f"Not Compliant - Password history should maintain at least {required_history} unique passwords"
         except Exception as e:
             logging.error("Unexpected error in _analyze_history", exc_info=True)
             return "Error analyzing password history"
@@ -127,15 +127,15 @@ class PasswordPolicyAnalysisService:
         if history >= required_history:
             return "Compliant"
         else:
-            return "Not Compliant - Password history should maintain at least 12 unique passwords"
+            return f"Not Compliant - Password history should maintain at least {required_history} unique passwords"
 
     def _analyze_lockout_threshold(self, lockout_threshold):
         try:
-            lockout_threshold = int(lockout_threshold)  # Convert lockout threshold to an integer
             required_lockout_threshold = int(self.settings.get('lockout_threshold', 5))
+            lockout_threshold = int(lockout_threshold)  # Convert lockout threshold to an integer
         except ValueError as e:
             logging.error("Invalid data - Lockout threshold is not a number [service]", exc_info=True)
-            return "Invalid data - Lockout threshold is not a number"
+            return f"Not Compliant - Lockout threshold should not exceed {required_lockout_threshold} attempts"
         except Exception as e:
             logging.error("Unexpected error in _analyze_lockout_threshold [service]", exc_info=True)
             return "Error analyzing lockout threshold"
@@ -147,11 +147,11 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_lockout_duration(self, duration):
         try:
-            duration = int(duration)
             required_duration = int(self.settings.get('lockout_duration', 30))  # Use the setting, default to 30 if not set
+            duration = int(duration)
         except ValueError as e:
             logging.error("Invalid data - Lockout duration or setting is not a number [service]", exc_info=True)
-            return "Invalid data - Lockout duration or setting is not a number"
+            return f"Not Compliant - Lockout duration should be at least {required_duration} minutes"
         except Exception as e:
             logging.error("Unexpected error in _analyze_lockout_duration [service]", exc_info=True)
             return "Error analyzing lockout duration"
@@ -163,11 +163,11 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_lockout_obs_win(self, obs_win):
         try:
-            obs_win = int(obs_win)
             required_obs_win = int(self.settings.get('lockout_obs_win', 30))  # Use the setting, default to 30 if not set
+            obs_win = int(obs_win)
         except ValueError as e:
             logging.error("Invalid data - Lockout observation window or setting is not a number [service]", exc_info=True)
-            return "Invalid data - Lockout observation window or setting is not a number"
+            return f"Not Compliant - Lockout observation window should be at least {required_obs_win} minutes"
         except Exception as e:
             logging.error("Unexpected error in _analyze_lockout_obs_win [service]", exc_info=True)
             return "Error analyzing lockout observation window"
