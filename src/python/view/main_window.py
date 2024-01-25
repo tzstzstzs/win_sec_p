@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, scrolledtext
 from ttkthemes import ThemedTk
 from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE
 import platform
@@ -83,7 +83,6 @@ class MainWindow(ThemedTk):
         for title, data_callback, result_callback, settings_callback in sections:
             section = create_section(self, title, data_callback, result_callback, settings_callback)
             setattr(self, f"{title.lower().replace(' ', '_')}_section", section)
-            print(section)
 
         # Run Button
         self.run_button = ttk.Button(self, text='Run Selected Features', command=self.run_selected_features)
@@ -106,7 +105,9 @@ class MainWindow(ThemedTk):
         self.os_version_label.pack(pady=10)
 
     def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps, show_password_policy,
-                      show_installed_updates, show_users_result, show_processes_result, show_open_ports_result, show_installed_apps_result, show_password_policy_result, show_installed_updates_result, run_selected_features, export_data, open_password_policy_settings, export_result):
+                      show_installed_updates, show_users_result, show_processes_result, show_open_ports_result,
+                      show_installed_apps_result, show_password_policy_result, show_installed_updates_result,
+                      run_selected_features, export_data, open_password_policy_settings, export_result):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports

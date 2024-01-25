@@ -3,6 +3,7 @@ from tkinter import messagebox
 from src.python.controllers.port_controller import PortController
 from src.python.controllers.process_controller import ProcessController
 from src.python.controllers.user_controller import UserController
+from src.python.controllers.user_analysis_controller import UserAnalysisController
 from src.python.controllers.app_controller import AppController
 from src.python.controllers.password_policy_controller import PasswordPolicyController
 from src.python.controllers.password_policy_analysis_controller import PasswordPolicyAnalysisController
@@ -14,6 +15,7 @@ class MainController:
     def __init__(self, main_window):
         self.main_window = main_window
         self.user_controller = UserController(main_window)
+        self.user_analysis_controller = UserAnalysisController(main_window)
         self.process_controller = ProcessController(main_window)
         self.port_controller = PortController(main_window)
         self.app_controller = AppController(main_window)
@@ -24,7 +26,7 @@ class MainController:
         self.setup_callbacks()
 
         self.data_store = {}
-        self.result = {}
+        self.all_results = {}
 
     def setup_callbacks(self):
         self.main_window.set_callbacks(
@@ -55,10 +57,7 @@ class MainController:
 
     def run_selected_features(self):
         try:
-            if self.main_window.user_list_section[1].get():
-                users = self.user_controller.retrieve_users()
-                if users is not None:
-                    self.data_store['User List'] = users
+            self.handle_user_list()
             if self.main_window.running_processes_section[1].get():
                 processes = self.process_controller.retrieve_processes()
                 if processes is not None:
@@ -80,6 +79,29 @@ class MainController:
             logging.error(f"Error running selected features: {e}", exc_info=True)
             messagebox.showerror("Error", "An error occurred while running selected features.")
 
+    def handle_user_list(self):
+        """
+        Handles the retrieval and storage of user list data.
+        """
+        if not self.main_window.user_list_section[1].get():
+            return
+        users = self.user_controller.retrieve_users()
+        if users is None:
+            return
+        self.data_store['User List'] = users
+        if self.main_window.user_list_section[1].get():
+            self.analyze_user(users)
+
+    def analyze_user(self, users):
+        """
+        Analyzes the user data.
+        Parameters:
+            users (list): The list of users to be analyzed.
+        """
+        user_analysis_result = self.user_analysis_controller.perform_user_analysis(users)
+        if user_analysis_result is not None:
+            self.all_results['User Analysis Result'] = user_analysis_result
+
     def handle_password_policy(self):
         if not self.main_window.password_policy_section[1].get():
             return
@@ -95,7 +117,7 @@ class MainController:
         password_policy_result = self.password_policy_analysis_controller.perform_password_policy_analysis(
             password_policy)
         if password_policy_result is not None:
-            self.result['Password Policy Result'] = password_policy_result
+            self.all_results['Password Policy Result'] = password_policy_result
 
     # Wrapper functions for controllers
     def show_users(self):
@@ -105,7 +127,10 @@ class MainController:
             self.handle_controller_error(e, "users")
 
     def show_users_result(self):
-        pass
+        try:
+            self.user_analysis_controller.show_user_analysis()
+        except Exception as e:
+            self.handle_controller_error(e, "user analysis")
 
     def show_processes(self):
         try:

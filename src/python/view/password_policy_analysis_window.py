@@ -26,14 +26,3 @@ class PasswordPolicyResultWindow(tk.Toplevel):
     def populate_result_list(self):
         for policy, status in self.analysis_result.items():
             self.tree.insert('', tk.END, values=(policy.replace('_', ' ').capitalize(), status))
-
-
-# root = tk.Tk()
-# analysis_result = {
-#     'password_length': 'Not Compliant - Minimum password length should be at least 8 characters',
-#     'max_age': 'Not Compliant - Maximum password age should not exceed 30 days',
-#     'min_age': 'Not Compliant - Minimum password age should be at least 1 day',
-#     'history': 'Invalid data - Password history length is not a number'
-# }
-# password_policy_window = PasswordPolicyResultWindow(root, analysis_result)
-# root.mainloop()

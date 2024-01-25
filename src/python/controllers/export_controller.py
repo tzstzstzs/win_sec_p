@@ -31,7 +31,7 @@ class ExportController:
 
     def export_result(self):
 
-        result_to_export = self.main_controller.result
+        result_to_export = self.main_controller.all_results
 
         # Ask the user for a file location
         file_path = filedialog.asksaveasfilename(

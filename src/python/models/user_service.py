@@ -24,10 +24,8 @@ def get_windows_users_with_powershell():
         if result.returncode != 0:
             logging.error(f"PowerShell script execution failed [service]: {result.stderr}")
             raise Exception(f"PowerShell script execution failed: {result.stderr}")
-        print(result.stdout)
-        print("\n\n")
+
         users_data = json.loads(result.stdout)
-        print(users_data)
 
         # If the data is a dictionary (single user), convert it to a list
         if isinstance(users_data, dict):

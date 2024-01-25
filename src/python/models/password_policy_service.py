@@ -17,7 +17,8 @@ def map_policy_data(policy_data):
         8: "Lockout observation window (minutes)",
         9: "Computer role"
     }
-    return [{"Index": item['Index'], "Policy": policy_map.get(item['Index'], f"Policy {item['Index']}"), "Value": item['Value']} for item in policy_data]
+    return [{"Index": item['Index'], "Policy": policy_map.get(item['Index'], f"Policy {item['Index']}"),
+             "Value": item['Value']} for item in policy_data]
 
 
 def get_password_policy():
