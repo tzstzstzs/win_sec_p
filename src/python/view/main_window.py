@@ -34,6 +34,7 @@ class MainWindow(ThemedTk):
         self.on_show_password_policy_result = None
         self.on_show_installed_updates_result = None
 
+        self.on_open_user_analysis_settings = None
         self.on_open_password_policy_settings = None
 
         self.on_run_selected_features = None
@@ -72,11 +73,12 @@ class MainWindow(ThemedTk):
         self.select_all_retrieve_checkbox.pack(side='right', padx=153)
 
         sections = [
-            ('User List', self.show_users, self.show_users_result, None),
+            ('User List', self.show_users, self.show_users_result, self.open_user_analysis_settings),
             ('Running Processes', self.show_processes, self.show_processes_result, None),
             ('Port List', self.show_open_ports, self.show_open_ports_result, None),
             ('Installed Apps', self.show_installed_apps, self.show_installed_updates_result, None),
-            ('Password Policy', self.show_password_policy, self.show_password_policy_result, self.open_password_policy_settings),
+            ('Password Policy', self.show_password_policy, self.show_password_policy_result,
+             self.open_password_policy_settings),
             ('Installed Updates', self.show_installed_updates, self.show_installed_updates_result, None)
         ]
 
@@ -107,7 +109,8 @@ class MainWindow(ThemedTk):
     def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps, show_password_policy,
                       show_installed_updates, show_users_result, show_processes_result, show_open_ports_result,
                       show_installed_apps_result, show_password_policy_result, show_installed_updates_result,
-                      run_selected_features, export_data, open_password_policy_settings, export_result):
+                      run_selected_features, export_data, open_user_analysis_settings, open_password_policy_settings,
+                      export_result):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
@@ -122,11 +125,17 @@ class MainWindow(ThemedTk):
         self.on_show_installed_updates_result = show_installed_updates_result
         self.on_run_selected_features = run_selected_features
         self.on_export_data = export_data
+        self.on_open_user_analysis_settings = open_user_analysis_settings
         self.on_open_password_policy_settings = open_password_policy_settings
         self.on_export_result = export_result
+
     def show_users(self):
         if self.on_show_users:
             self.on_show_users()
+
+    def open_user_analysis_settings(self):
+        if self.on_open_user_analysis_settings:
+            self.on_open_user_analysis_settings()
 
     def show_users_result(self):
         if self.on_show_users_result:
@@ -163,7 +172,6 @@ class MainWindow(ThemedTk):
     def open_password_policy_settings(self):
         if self.on_open_password_policy_settings:
             self.on_open_password_policy_settings()
-        print("Open password policy settings")
 
     def show_password_policy_result(self):
         if self.on_show_password_policy_result:
@@ -179,9 +187,11 @@ class MainWindow(ThemedTk):
 
     def toggle_select_all(self, select_all_var, retrieve):
         is_selected = select_all_var.get()
-        for section in ['user_list', 'running_processes', 'port_list', 'installed_apps', 'password_policy', 'installed_updates']:
+        for section in ['user_list', 'running_processes', 'port_list', 'installed_apps', 'password_policy',
+                        'installed_updates']:
             section_obj = getattr(self, f"{section}_section")
-            section_var = section_obj[1] if retrieve else section_obj[3]  # retrieve checkbox if retrieve=True else analyze checkbox
+            section_var = section_obj[1] if retrieve else section_obj[
+                3]  # retrieve checkbox if retrieve=True else analyze checkbox
             section_var.set(is_selected)
 
     def run_selected_features(self):

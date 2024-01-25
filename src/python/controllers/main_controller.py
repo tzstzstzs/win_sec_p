@@ -44,6 +44,7 @@ class MainController:
             self.show_installed_updates_result,
             self.run_selected_features,
             self.handle_export,
+            self.open_user_analysis_settings,
             self.open_password_policy_settings,
             self.export_result
         )
@@ -125,6 +126,12 @@ class MainController:
             self.user_controller.show_users()
         except Exception as e:
             self.handle_controller_error(e, "users")
+
+    def open_user_analysis_settings(self):
+        try:
+            self.user_analysis_controller.open_user_analysis_settings()
+        except Exception as e:
+            self.handle_controller_error(e, "user analysis settings")
 
     def show_users_result(self):
         try:

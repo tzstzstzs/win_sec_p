@@ -58,6 +58,6 @@ class PasswordPolicyAnalysisController:
         )
         self.settings_window.grab_set()  # Make the settings window modal
 
-    def save_password_policy_settings(self,settings):
+    def save_password_policy_settings(self, settings):
         self.password_policy_settings = settings
         logging.info(f"Password policy settings saved: {self.password_policy_settings}")
