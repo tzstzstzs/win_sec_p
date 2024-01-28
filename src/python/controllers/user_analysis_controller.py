@@ -2,6 +2,7 @@ import logging
 from src.python.view.user_analysis_window import UserAnalysisWindow
 from src.python.models.user_analysis_service import UserAnalysisService
 from src.python.view.user_analysis_settings_window import UserAnalysisSettingsWindow
+from src.python.models.settings_manager import SettingsManager
 from tkinter import messagebox
 
 
@@ -9,16 +10,8 @@ class UserAnalysisController:
     def __init__(self, main_window):
         self.main_window = main_window
         self.analysis_results = []
-        # Default settings for user analysis
-        self.default_users = {
-            "Alapértelmezett fiók",
-            "Rendszergazda",
-            "Vendég",
-            "VDAGUtilityAccount"
-            "test_project1"
-        }
-        # List to store actual settings
-        self.user_analysis_settings = self.default_users
+        self.settings_manager = SettingsManager()
+        self.user_analysis_settings = self.settings_manager.get_setting('default_users')
 
     def perform_user_analysis(self, user_data):
         logging.info("Attempting to analyze user data [controller].")
@@ -46,13 +39,17 @@ class UserAnalysisController:
             messagebox.showinfo("User Analysis", "No user analysis data available.")
 
     def open_user_analysis_settings(self):
+        # Load current 'default_users' settings for display
+        current_settings = self.settings_manager.get_setting('default_users')
         self.settings_window = UserAnalysisSettingsWindow(
             self.main_window,
             save_callback=self.save_user_analysis_settings,
-            defaults=self.default_users
+            defaults=current_settings  # Pass current settings to settings window
         )
         self.settings_window.grab_set()  # Make the settings window modal
 
     def save_user_analysis_settings(self, settings):
+        # Save the updated 'default_users' settings
+        self.settings_manager.update_setting('default_users', settings)
         self.user_analysis_settings = settings
         logging.info(f"User analysis settings saved: {self.user_analysis_settings}")

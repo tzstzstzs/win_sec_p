@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 
 class PasswordPolicySettingsWindow(tk.Toplevel):
@@ -64,6 +64,14 @@ class PasswordPolicySettingsWindow(tk.Toplevel):
         cancel_button = ttk.Button(self, text="Cancel", command=self.destroy)
         cancel_button.grid(row=8, column=1, padx=10, pady=20, sticky='w')
 
+    def is_natural_number(self, value):
+        """Check if the value is a natural number."""
+        try:
+            number = int(value)
+            return number > 0
+        except ValueError:
+            return False
+
     def save_settings(self):
         # Gather settings into a dictionary
         settings = {
@@ -76,6 +84,15 @@ class PasswordPolicySettingsWindow(tk.Toplevel):
             'lockout_duration': self.lockout_duration_entry.get(),
             'lockout_obs_win': self.lockout_obs_win_entry.get()
         }
+
+        # Validate all settings are natural numbers
+        if all(self.is_natural_number(settings[key]) for key in settings):
+            if self.save_callback:
+                self.save_callback(settings)
+            self.destroy()  # Close the window after saving
+        else:
+            messagebox.showerror("Error", "All fields must contain natural numbers (positive integers).")
+
 
         # Call the save callback function if it's set
         if self.save_callback:

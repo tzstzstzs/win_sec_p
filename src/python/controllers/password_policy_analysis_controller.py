@@ -2,6 +2,7 @@ import logging
 from src.python.view.password_policy_analysis_window import PasswordPolicyAnalysisWindow
 from src.python.models.password_policy_analysis_service import PasswordPolicyAnalysisService
 from src.python.view.password_policy_settings_window import PasswordPolicySettingsWindow
+from src.python.models.settings_manager import SettingsManager
 from tkinter import messagebox
 
 
@@ -9,19 +10,10 @@ class PasswordPolicyAnalysisController:
     def __init__(self, main_window):
         self.main_window = main_window
         self.analysis_results = []
-        # Default settings for password policy
-        self.default_settings = {
-            'logoff_time': '30',
-            'min_length': '8',
-            'max_age': '90',
-            'min_age': '1',
-            'history': '5',
-            'lockout_threshold': '5',
-            'lockout_duration': '30',
-            'lockout_obs_win': '30'
-        }
-        # Dictionary to store actual settings
-        self.password_policy_settings = {}
+        self.settings_manager = SettingsManager()
+        # Load 'password_policy' settings using SettingsManager
+        self.password_policy_settings = self.settings_manager.get_setting('password_policy')
+
 
     def perform_password_policy_analysis(self, policy_data):
         logging.info("Attempting to analyze password policy [controller].")
@@ -49,14 +41,17 @@ class PasswordPolicyAnalysisController:
             messagebox.showinfo("Password Policy Analysis", "No password policy analysis data available.")
 
     def open_password_policy_settings(self):
-        # Open the settings window
+        # Load current 'password_policy' settings for display
+        current_settings = self.settings_manager.get_setting('password_policy')
         self.settings_window = PasswordPolicySettingsWindow(
             self.main_window,
             save_callback=self.save_password_policy_settings,
-            defaults=self.default_settings
+            defaults=current_settings  # Pass current settings to settings window
         )
         self.settings_window.grab_set()  # Make the settings window modal
 
     def save_password_policy_settings(self, settings):
+        # Save the updated 'password_policy' settings
+        self.settings_manager.update_setting('password_policy', settings)
         self.password_policy_settings = settings
         logging.info(f"Password policy settings saved: {self.password_policy_settings}")
