@@ -35,6 +35,7 @@ class MainWindow(ThemedTk):
         self.on_show_installed_updates_result = None
 
         self.on_open_user_analysis_settings = None
+        self.on_open_process_analysis_settings = None
         self.on_open_password_policy_settings = None
 
         self.on_run_selected_features = None
@@ -74,7 +75,7 @@ class MainWindow(ThemedTk):
 
         sections = [
             ('User List', self.show_users, self.show_users_result, self.open_user_analysis_settings),
-            ('Running Processes', self.show_processes, self.show_processes_result, None),
+            ('Running Processes', self.show_processes, self.show_processes_result, self.open_process_analysis_settings),
             ('Port List', self.show_open_ports, self.show_open_ports_result, None),
             ('Installed Apps', self.show_installed_apps, self.show_installed_updates_result, None),
             ('Password Policy', self.show_password_policy, self.show_password_policy_result,
@@ -109,8 +110,8 @@ class MainWindow(ThemedTk):
     def set_callbacks(self, show_users, show_processes, show_open_ports, show_installed_apps, show_password_policy,
                       show_installed_updates, show_users_result, show_processes_result, show_open_ports_result,
                       show_installed_apps_result, show_password_policy_result, show_installed_updates_result,
-                      run_selected_features, export_data, open_user_analysis_settings, open_password_policy_settings,
-                      export_result):
+                      open_user_analysis_settings, open_process_analysis_settings, open_password_policy_settings,
+                      run_selected_features, export_data, export_result):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
@@ -123,10 +124,11 @@ class MainWindow(ThemedTk):
         self.on_show_installed_apps_result = show_installed_apps_result
         self.on_show_password_policy_result = show_password_policy_result
         self.on_show_installed_updates_result = show_installed_updates_result
+        self.on_open_user_analysis_settings = open_user_analysis_settings
+        self.on_open_process_analysis_settings = open_process_analysis_settings
+        self.on_open_password_policy_settings = open_password_policy_settings
         self.on_run_selected_features = run_selected_features
         self.on_export_data = export_data
-        self.on_open_user_analysis_settings = open_user_analysis_settings
-        self.on_open_password_policy_settings = open_password_policy_settings
         self.on_export_result = export_result
 
     def show_users(self):
@@ -144,6 +146,10 @@ class MainWindow(ThemedTk):
     def show_processes(self):
         if self.on_show_processes:
             self.on_show_processes()
+
+    def open_process_analysis_settings(self):
+        if self.on_open_process_analysis_settings:
+            self.on_open_process_analysis_settings()
 
     def show_processes_result(self):
         if self.on_show_processes_result:

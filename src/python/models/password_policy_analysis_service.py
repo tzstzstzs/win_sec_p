@@ -2,9 +2,9 @@ import logging
 
 
 class PasswordPolicyAnalysisService:
-    def __init__(self, policy_data, settings):
+    def __init__(self, policy_data, password_settings):
         self.policy_data = policy_data
-        self.settings = settings
+        self.password_settings = password_settings
         logging.info("PasswordPolicyAnalysisService initialized with policy data [service]")
 
     def analyze_password_policy(self):
@@ -52,7 +52,7 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_logoff_time(self, logoff_time):
         try:
-            req_logoff_time = int(self.settings.get('logoff_time', 30))
+            req_logoff_time = int(self.password_settings.get('logoff_time', 30))
             logoff_time = int(logoff_time)  # Convert history to an integer
         except ValueError as e:
             logging.error("Invalid data - Force logoff time is not a number", exc_info=True)
@@ -68,7 +68,7 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_length(self, length):
         try:
-            required_length = int(self.settings.get('min_length', 8))  # Use the setting, default to 8 if not set
+            required_length = int(self.password_settings.get('min_length', 8))  # Use the setting, default to 8 if not set
             length = int(length)
         except ValueError as e:
             logging.error("Invalid data - Password length or setting is not a number [service]", exc_info=True)
@@ -83,7 +83,7 @@ class PasswordPolicyAnalysisService:
             return f"Not Compliant - Minimum password length should be at least {required_length} characters"
     def _analyze_max_age(self, age):
         try:
-            required_max_age = int(self.settings.get('max_age', 90))
+            required_max_age = int(self.password_settings.get('max_age', 90))
             age = int(age)  # Convert age to an integer
         except ValueError as e:
             logging.error("Invalid data - Password age is not a number [service]", exc_info=True)
@@ -99,7 +99,7 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_min_age(self, age):
         try:
-            required_min_age = int(self.settings.get('min_age', 1))
+            required_min_age = int(self.password_settings.get('min_age', 1))
             age = int(age)  # Convert length to an integer
         except ValueError as e:
             logging.error("Invalid data - Password age is not a number [service]", exc_info=True)
@@ -115,7 +115,7 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_history(self, history):
         try:
-            required_history = int(self.settings.get('history', 5))
+            required_history = int(self.password_settings.get('history', 5))
             history = int(history)
         except ValueError as e:
             logging.error("Invalid data - Password history is not a number", exc_info=True)
@@ -131,7 +131,7 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_lockout_threshold(self, lockout_threshold):
         try:
-            required_lockout_threshold = int(self.settings.get('lockout_threshold', 5))
+            required_lockout_threshold = int(self.password_settings.get('lockout_threshold', 5))
             lockout_threshold = int(lockout_threshold)  # Convert lockout threshold to an integer
         except ValueError as e:
             logging.error("Invalid data - Lockout threshold is not a number [service]", exc_info=True)
@@ -147,7 +147,7 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_lockout_duration(self, duration):
         try:
-            required_duration = int(self.settings.get('lockout_duration', 30))  # Use the setting, default to 30 if not set
+            required_duration = int(self.password_settings.get('lockout_duration', 30))  # Use the setting, default to 30 if not set
             duration = int(duration)
         except ValueError as e:
             logging.error("Invalid data - Lockout duration or setting is not a number [service]", exc_info=True)
@@ -163,7 +163,7 @@ class PasswordPolicyAnalysisService:
 
     def _analyze_lockout_obs_win(self, obs_win):
         try:
-            required_obs_win = int(self.settings.get('lockout_obs_win', 30))  # Use the setting, default to 30 if not set
+            required_obs_win = int(self.password_settings.get('lockout_obs_win', 30))  # Use the setting, default to 30 if not set
             obs_win = int(obs_win)
         except ValueError as e:
             logging.error("Invalid data - Lockout observation window or setting is not a number [service]", exc_info=True)

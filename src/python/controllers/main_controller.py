@@ -2,6 +2,7 @@ import logging
 from tkinter import messagebox
 from src.python.controllers.port_controller import PortController
 from src.python.controllers.process_controller import ProcessController
+from src.python.controllers.process_analysis_controller import ProcessAnalysisController
 from src.python.controllers.user_controller import UserController
 from src.python.controllers.user_analysis_controller import UserAnalysisController
 from src.python.controllers.app_controller import AppController
@@ -17,6 +18,7 @@ class MainController:
         self.user_controller = UserController(main_window)
         self.user_analysis_controller = UserAnalysisController(main_window)
         self.process_controller = ProcessController(main_window)
+        self.process_analysis_controller = ProcessAnalysisController(main_window)
         self.port_controller = PortController(main_window)
         self.app_controller = AppController(main_window)
         self.password_policy_controller = PasswordPolicyController(main_window)
@@ -42,10 +44,11 @@ class MainController:
             self.show_installed_apps_result,
             self.show_password_policy_result,
             self.show_installed_updates_result,
-            self.run_selected_features,
-            self.handle_export,
             self.open_user_analysis_settings,
+            self.open_process_analysis_settings,
             self.open_password_policy_settings,
+            self.run_selected_features,
+            self.export_data,
             self.export_result
         )
 
@@ -59,10 +62,7 @@ class MainController:
     def run_selected_features(self):
         try:
             self.handle_user_list()
-            if self.main_window.running_processes_section[1].get():
-                processes = self.process_controller.retrieve_processes()
-                if processes is not None:
-                    self.data_store['Running Processes'] = processes
+            self.handle_processes()
             if self.main_window.port_list_section[1].get():
                 ports = self.port_controller.retrieve_ports()
                 if ports is not None:
@@ -90,7 +90,7 @@ class MainController:
         if users is None:
             return
         self.data_store['User List'] = users
-        if self.main_window.user_list_section[1].get():
+        if self.main_window.user_list_section[3].get():
             self.analyze_user(users)
 
     def analyze_user(self, users):
@@ -102,6 +102,29 @@ class MainController:
         user_analysis_result = self.user_analysis_controller.perform_user_analysis(users)
         if user_analysis_result is not None:
             self.all_results['User Analysis Result'] = user_analysis_result
+
+    def handle_processes(self):
+        """
+        Handles the retrieval and storage of process list data.
+        """
+        if not self.main_window.running_processes_section[1].get():
+            return
+        processes = self.process_controller.retrieve_processes()
+        if processes is None:
+            return
+        self.data_store['Running Processes'] = processes
+        if self.main_window.running_processes_section[3].get():
+            self.analyze_process(processes)
+
+    def analyze_process(self, processes):
+        """
+        Analyzes the process data.
+        Parameters:
+            processes (list): The list of processes to be analyzed.
+        """
+        process_analysis_result = self.process_analysis_controller.perform_process_analysis(processes)
+        if process_analysis_result is not None:
+            self.all_results['Process Analysis Result'] = process_analysis_result
 
     def handle_password_policy(self):
         if not self.main_window.password_policy_section[1].get():
@@ -145,8 +168,17 @@ class MainController:
         except Exception as e:
             self.handle_controller_error(e, "processes")
 
+    def open_process_analysis_settings(self):
+        try:
+            self.process_analysis_controller.open_process_analysis_settings()
+        except Exception as e:
+            self.handle_controller_error(e, "process analysis settings")
+
     def show_processes_result(self):
-        pass
+        try:
+            self.process_analysis_controller.show_process_analysis()
+        except Exception as e:
+            self.handle_controller_error(e, "process analysis")
 
     def show_open_ports(self):
         try:
@@ -193,7 +225,7 @@ class MainController:
     def show_installed_updates_result(self):
         pass
 
-    def handle_export(self):
+    def export_data(self):
         self.export_controller.export_data()
 
     def export_result(self):

@@ -1,5 +1,5 @@
 import logging
-from src.python.view.password_policy_analysis_window import PasswordPolicyResultWindow
+from src.python.view.password_policy_analysis_window import PasswordPolicyAnalysisWindow
 from src.python.models.password_policy_analysis_service import PasswordPolicyAnalysisService
 from src.python.view.password_policy_settings_window import PasswordPolicySettingsWindow
 from tkinter import messagebox
@@ -31,7 +31,6 @@ class PasswordPolicyAnalysisController:
             self.analysis_results = analysis_service.analyze_password_policy()
             self.main_window.enable_button(self.main_window.password_policy_section[4])
             logging.info("Successfully analyzed password policy [controller].")
-            print(self.analysis_results)
             return self.analysis_results
         except Exception as e:
             logging.error(f"Failed to analyze password policy [controller]: {e}", exc_info=True)
@@ -41,7 +40,7 @@ class PasswordPolicyAnalysisController:
     def show_password_policy_analysis(self):
         if self.analysis_results:
             try:
-                PasswordPolicyResultWindow(self.main_window, self.analysis_results)
+                PasswordPolicyAnalysisWindow(self.main_window, self.analysis_results)
             except Exception as e:
                 logging.error(f"Error displaying password policy analysis [controller]: {e}", exc_info=True)
                 messagebox.showerror("Error", "An error occurred while displaying the password policy analysis.")

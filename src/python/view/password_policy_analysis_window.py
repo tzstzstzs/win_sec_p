@@ -1,11 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-class PasswordPolicyResultWindow(tk.Toplevel):
+
+class PasswordPolicyAnalysisWindow(tk.Toplevel):
     def __init__(self, parent, analysis_result):
         super().__init__(parent)
         self.title('Password Policy Analysis Result')
-        self.geometry('800x300')  # Adjust the window size as needed
+        self.geometry('800x300')
         self.analysis_result = analysis_result
         self.create_result_list()
 

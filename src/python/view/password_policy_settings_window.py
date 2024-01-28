@@ -81,5 +81,4 @@ class PasswordPolicySettingsWindow(tk.Toplevel):
         if self.save_callback:
             self.save_callback(settings)
 
-        print(f"Settings saved: logoff time: {settings['logoff_time']}, min length: {settings['min_length']}, max age: {settings['max_age']}, min age: {settings['min_age']}, history: {settings['history']}, lockout threshold {settings['lockout_threshold']}, lockout duration {settings['lockout_duration']}, lockout observation window {settings['lockout_obs_win']}")
         self.destroy()  # Close the window after saving

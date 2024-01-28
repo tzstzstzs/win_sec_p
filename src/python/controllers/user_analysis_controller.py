@@ -26,9 +26,8 @@ class UserAnalysisController:
             # Pass the user data to the analysis service
             analysis_service = UserAnalysisService(user_data, self.user_analysis_settings)
             self.analysis_results = analysis_service.analyze_users()
-            self.main_window.enable_button(self.main_window.user_list_section[4])  # Adjust the index as per the main window design
+            self.main_window.enable_button(self.main_window.user_list_section[4])
             logging.info("Successfully analyzed user data [controller].")
-            print(self.analysis_results)
             return self.analysis_results
         except Exception as e:
             logging.error(f"Failed to analyze user data [controller]: {e}", exc_info=True)
