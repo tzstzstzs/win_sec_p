@@ -13,7 +13,7 @@ class PasswordPolicyAnalysisController:
         self.settings_manager = SettingsManager()
         # Load 'password_policy' settings using SettingsManager
         self.password_policy_settings = self.settings_manager.get_setting('password_policy')
-
+        self.settings_window = None
 
     def perform_password_policy_analysis(self, policy_data):
         logging.info("Attempting to analyze password policy [controller].")
@@ -41,14 +41,18 @@ class PasswordPolicyAnalysisController:
             messagebox.showinfo("Password Policy Analysis", "No password policy analysis data available.")
 
     def open_password_policy_settings(self):
-        # Load current 'password_policy' settings for display
-        current_settings = self.settings_manager.get_setting('password_policy')
-        self.settings_window = PasswordPolicySettingsWindow(
-            self.main_window,
-            save_callback=self.save_password_policy_settings,
-            defaults=current_settings  # Pass current settings to settings window
-        )
-        self.settings_window.grab_set()  # Make the settings window modal
+        # Check if the settings window is already open
+        if not self.settings_window or not self.settings_window.winfo_exists():
+            current_settings = self.settings_manager.get_setting('password_policy')
+            self.settings_window = PasswordPolicySettingsWindow(
+                self.main_window,
+                save_callback=self.save_password_policy_settings,
+                defaults=current_settings
+            )
+            self.settings_window.grab_set()
+        else:
+            # Bring the existing settings window to focus
+            self.settings_window.focus_set()
 
     def save_password_policy_settings(self, settings):
         # Save the updated 'password_policy' settings

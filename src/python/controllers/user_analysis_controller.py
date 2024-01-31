@@ -12,6 +12,7 @@ class UserAnalysisController:
         self.analysis_results = []
         self.settings_manager = SettingsManager()
         self.user_analysis_settings = self.settings_manager.get_setting('default_users')
+        self.settings_window = None
 
     def perform_user_analysis(self, user_data):
         logging.info("Attempting to analyze user data [controller].")
@@ -39,14 +40,18 @@ class UserAnalysisController:
             messagebox.showinfo("User Analysis", "No user analysis data available.")
 
     def open_user_analysis_settings(self):
-        # Load current 'default_users' settings for display
-        current_settings = self.settings_manager.get_setting('default_users')
-        self.settings_window = UserAnalysisSettingsWindow(
-            self.main_window,
-            save_callback=self.save_user_analysis_settings,
-            defaults=current_settings  # Pass current settings to settings window
-        )
-        self.settings_window.grab_set()  # Make the settings window modal
+        # Check if the settings window is already open
+        if not self.settings_window or not self.settings_window.winfo_exists():
+            current_settings = self.settings_manager.get_setting('default_users')
+            self.settings_window = UserAnalysisSettingsWindow(
+                self.main_window,
+                save_callback=self.save_user_analysis_settings,
+                defaults=current_settings
+            )
+            self.settings_window.grab_set()
+        else:
+            # Bring the existing settings window to focus
+            self.settings_window.focus_set()
 
     def save_user_analysis_settings(self, settings):
         # Save the updated 'default_users' settings

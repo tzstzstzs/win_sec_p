@@ -13,6 +13,7 @@ class ProcessAnalysisController:
         self.settings_manager = SettingsManager()
         # Load 'default_processes' settings using SettingsManager
         self.process_analysis_settings = self.settings_manager.get_setting('default_processes')
+        self.settings_window = None
 
     def perform_process_analysis(self, process_data):
         logging.info("Attempting to analyze process data [controller].")
@@ -39,14 +40,18 @@ class ProcessAnalysisController:
             messagebox.showinfo("Process Analysis", "No process analysis data available.")
 
     def open_process_analysis_settings(self):
-        # Load current 'default_processes' settings for display
-        current_settings = self.settings_manager.get_setting('default_processes')
-        self.settings_window = ProcessSettingsWindow(
-            self.main_window,
-            save_callback=self.save_process_analysis_settings,
-            defaults=current_settings  # Pass current settings to settings window
-        )
-        self.settings_window.grab_set()  # Make the settings window modal
+        # Check if the settings window is already open
+        if not self.settings_window or not self.settings_window.winfo_exists():
+            current_settings = self.settings_manager.get_setting('default_processes')
+            self.settings_window = ProcessSettingsWindow(
+                self.main_window,
+                save_callback=self.save_process_analysis_settings,
+                defaults=current_settings
+            )
+            self.settings_window.grab_set()
+        else:
+            # Bring the existing settings window to focus
+            self.settings_window.focus_set()
 
     def save_process_analysis_settings(self, settings):
         # Save the updated 'default_processes' settings
