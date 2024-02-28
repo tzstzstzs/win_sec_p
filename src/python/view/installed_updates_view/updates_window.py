@@ -10,11 +10,12 @@ class UpdateListWindow(tk.Toplevel):
         self.geometry('1400x600')
         self.updates_data = updates_data
         # Initialize sort order for all columns
-        self.sort_order = {col: True for col in ('PropertyDescription', 'HotFixID', 'InstalledOn', 'InstalledBy')}
+        self.sort_order = {col: True for col in ('Description', 'HotFixID', 'InstalledOn', 'InstalledBy')}
         self.create_update_list()
 
     def create_update_list(self):
-        self.tree = ttk.Treeview(self, columns=('PropertyDescription', 'HotFixID', 'InstalledOn', 'InstalledBy'),
+        print(self.updates_data)
+        self.tree = ttk.Treeview(self, columns=('Description', 'HotFixID', 'InstalledOn', 'InstalledBy'),
                                  show='headings')
         self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
         self.tree.configure(yscrollcommand=self.vsb.set)
@@ -34,5 +35,5 @@ class UpdateListWindow(tk.Toplevel):
     def populate_update_list(self):
         for update in self.updates_data:
             self.tree.insert('', tk.END, values=(
-                update.get('HotFixID', 'N/A'), update.get('Description', 'N/A'),
+                update.get('Description', 'N/A'), update.get('HotFixID', 'N/A'),
                 update.get('InstalledOn', 'N/A'), update.get('InstalledBy', 'N/A')))

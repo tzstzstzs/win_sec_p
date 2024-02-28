@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 
+
 class AppsAnalysisSettingsWindow(tk.Toplevel):
     def __init__(self, parent, save_callback=None, defaults=None):
         super().__init__(parent)
@@ -30,17 +31,24 @@ class AppsAnalysisSettingsWindow(tk.Toplevel):
             listbox.insert(tk.END, f"{item['Name']} - {item['Version']} - {item['Vendor']}")
 
         # Edit and Delete buttons for list items
-        ttk.Button(self, text="Edit", command=lambda lb=listbox, ln=list_name: self.edit_list_item(lb, ln)).grid(row=row, column=2, padx=10, pady=10)
-        ttk.Button(self, text="Delete", command=lambda lb=listbox, ln=list_name: self.delete_list_item(lb, ln)).grid(row=row, column=3, padx=10, pady=10)
-        ttk.Button(self, text="Add", command=lambda lb=listbox, ln=list_name: self.add_list_item(lb, ln)).grid(row=row, column=4, padx=10, pady=10)
+        ttk.Button(self, text="Edit", command=lambda lb=listbox, ln=list_name: self.edit_list_item(lb, ln)).grid(
+            row=row, column=2, padx=10, pady=10)
+        ttk.Button(self, text="Delete", command=lambda lb=listbox, ln=list_name: self.delete_list_item(lb, ln)).grid(
+            row=row, column=3, padx=10, pady=10)
+        ttk.Button(self, text="Add", command=lambda lb=listbox, ln=list_name: self.add_list_item(lb, ln)).grid(row=row,
+                                                                                                               column=4,
+                                                                                                               padx=10,
+                                                                                                               pady=10)
 
     def edit_list_item(self, listbox, list_name):
         selected = listbox.curselection()
         if selected:
             current_item = getattr(self, list_name)[selected[0]]
             new_item_name = simpledialog.askstring("Edit Item", "Edit item name:", initialvalue=current_item['Name'])
-            new_item_version = simpledialog.askstring("Edit Item", "Edit item version:", initialvalue=current_item['Version'])
-            new_item_vendor = simpledialog.askstring("Edit Item", "Edit item vendor:", initialvalue=current_item['Vendor'])
+            new_item_version = simpledialog.askstring("Edit Item", "Edit item version:",
+                                                      initialvalue=current_item['Version'])
+            new_item_vendor = simpledialog.askstring("Edit Item", "Edit item vendor:",
+                                                     initialvalue=current_item['Vendor'])
             if new_item_name and new_item_version and new_item_vendor:
                 updated_item = {"Name": new_item_name, "Version": new_item_version, "Vendor": new_item_vendor}
                 getattr(self, list_name)[selected[0]] = updated_item

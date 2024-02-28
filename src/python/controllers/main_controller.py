@@ -10,7 +10,8 @@ from src.python.controllers.installed_apps_controllers.apps_controller import Ap
 from src.python.controllers.installed_apps_controllers.apps_analysis_controller import AppsAnalysisController
 from src.python.controllers.password_policy_controllers.password_policy_controller import PasswordPolicyController
 from src.python.controllers.password_policy_controllers.password_policy_analysis_controller import PasswordPolicyAnalysisController
-from src.python.controllers.installed_updates_controllers.installed_updates_controller import UpdatesController
+from src.python.controllers.installed_updates_controllers.updates_controller import UpdatesController
+from src.python.controllers.installed_updates_controllers.updates_analysis_controller import UpdatesAnalysisController
 from src.python.controllers.export_controller import ExportController
 
 
@@ -28,6 +29,7 @@ class MainController:
         self.password_policy_controller = PasswordPolicyController(main_window)
         self.password_policy_analysis_controller = PasswordPolicyAnalysisController(main_window)
         self.updates_controller = UpdatesController(main_window)
+        self.updates_analysis_controller = UpdatesAnalysisController(main_window)
         self.export_controller = ExportController(main_window, self)
         self.setup_callbacks()
 
@@ -53,6 +55,7 @@ class MainController:
             self.open_port_analysis_settings,
             self.open_apps_analysis_settings,
             self.open_password_policy_settings,
+            self.open_installed_updates_settings,
             self.run_selected_features,
             self.export_data,
             self.export_result
@@ -72,10 +75,7 @@ class MainController:
             self.handle_ports()
             self.handle_apps()
             self.handle_password_policy()
-            if self.main_window.installed_updates_section[1].get():
-                updates = self.updates_controller.retrieve_updates()
-                if updates is not None:
-                    self.data_store['Installed Updates'] = updates
+            self.handle_installed_updates()
         except Exception as e:
             logging.error(f"Error running selected features: {e}", exc_info=True)
             messagebox.showerror("Error", "An error occurred while running selected features.")
@@ -191,6 +191,22 @@ class MainController:
         if password_policy_result is not None:
             self.all_results['Password Policy Result'] = password_policy_result
 
+    def handle_installed_updates(self):
+        if not self.main_window.installed_updates_section[1].get():
+            return
+        installed_updates = self.updates_controller.retrieve_updates()
+        if installed_updates is None:
+            return
+        self.data_store['Installed Updates'] = installed_updates
+        if not self.main_window.installed_updates_section[3].get():
+            return
+        self.analyze_installed_updates(installed_updates)
+
+    def analyze_installed_updates(self, installed_updates):
+        installed_updates_result = self.updates_analysis_controller.perform_updates_analysis(installed_updates)
+        if installed_updates_result is not None:
+            self.all_results['Installed Updates Result'] = installed_updates_result
+
     # Wrapper functions for controllers
     def show_users(self):
         try:
@@ -288,8 +304,17 @@ class MainController:
         except Exception as e:
             self.handle_controller_error(e, "installed updates")
 
+    def open_installed_updates_settings(self):
+        try:
+            self.updates_analysis_controller.open_updates_analysis_settings()
+        except Exception as e:
+            self.handle_controller_error(e, "installed updates settings")
+
     def show_installed_updates_result(self):
-        pass
+        try:
+            self.updates_analysis_controller.show_updates_analysis()
+        except Exception as e:
+            self.handle_controller_error(e, "installed updates analysis")
 
     def export_data(self):
         self.export_controller.export_data()

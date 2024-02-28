@@ -69,5 +69,10 @@
     "suspicious_ports": [
         "443",
         "445"
+    ],
+    "authorized_updates": [
+        "KB5034466",
+        "KB5034763",
+        "KB5034467"
     ]
 }

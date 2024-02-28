@@ -39,6 +39,7 @@ class MainWindow(ThemedTk):
         self.on_open_port_analysis_settings = None
         self.on_open_installed_apps_analysis_settings = None
         self.on_open_password_policy_settings = None
+        self.on_open_installed_updates_settings = None
 
         self.on_run_selected_features = None
         self.on_export_data = None
@@ -79,10 +80,12 @@ class MainWindow(ThemedTk):
             ('User List', self.show_users, self.show_users_result, self.open_user_analysis_settings),
             ('Running Processes', self.show_processes, self.show_processes_result, self.open_process_analysis_settings),
             ('Port List', self.show_open_ports, self.show_open_ports_result, self.open_port_analysis_settings),
-            ('Installed Apps', self.show_installed_apps, self.show_installed_apps_result, self.open_installed_apps_analysis_settings),
+            ('Installed Apps', self.show_installed_apps, self.show_installed_apps_result,
+             self.open_installed_apps_analysis_settings),
             ('Password Policy', self.show_password_policy, self.show_password_policy_result,
              self.open_password_policy_settings),
-            ('Installed Updates', self.show_installed_updates, self.show_installed_updates_result, None)
+            ('Installed Updates', self.show_installed_updates, self.show_installed_updates_result,
+             self.open_installed_updates_settings)
         ]
 
         for title, data_callback, result_callback, settings_callback in sections:
@@ -113,8 +116,8 @@ class MainWindow(ThemedTk):
                       show_installed_updates, show_users_result, show_processes_result, show_open_ports_result,
                       show_installed_apps_result, show_password_policy_result, show_installed_updates_result,
                       open_user_analysis_settings, open_process_analysis_settings, open_port_analysis_settings,
-                      open_installed_apps_analysis_settings, open_password_policy_settings, run_selected_features, export_data,
-                      export_result):
+                      open_installed_apps_analysis_settings, open_password_policy_settings, open_installed_updates_settings,
+                      run_selected_features, export_data, export_result):
         self.on_show_users = show_users
         self.on_show_processes = show_processes
         self.on_show_open_ports = show_open_ports
@@ -132,6 +135,7 @@ class MainWindow(ThemedTk):
         self.on_open_port_analysis_settings = open_port_analysis_settings
         self.on_open_installed_apps_analysis_settings = open_installed_apps_analysis_settings
         self.on_open_password_policy_settings = open_password_policy_settings
+        self.on_open_installed_updates_settings = open_installed_updates_settings
         self.on_run_selected_features = run_selected_features
         self.on_export_data = export_data
         self.on_export_result = export_result
@@ -199,6 +203,10 @@ class MainWindow(ThemedTk):
     def show_installed_updates(self):
         if self.on_show_installed_updates:
             self.on_show_installed_updates()
+
+    def open_installed_updates_settings(self):
+        if self.on_open_installed_updates_settings:
+            self.open_installed_updates_settings()
 
     def show_installed_updates_result(self):
         if self.on_show_installed_updates_result:
