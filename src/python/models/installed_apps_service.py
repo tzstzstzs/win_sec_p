@@ -18,7 +18,7 @@ def get_installed_apps():
     try:
         # Execute the PowerShell script
         result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-Command", script_content],
-                                capture_output=True, text=True, check=True)
+                                capture_output=True, text=True, check=True, encoding='utf-8')
 
         # Check for errors
         if result.stderr:

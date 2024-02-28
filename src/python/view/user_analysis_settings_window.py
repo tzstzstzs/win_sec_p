@@ -41,7 +41,6 @@ class UserAnalysisSettingsWindow(tk.Toplevel):
 
     def populate_default_users(self):
         # Populate the listbox with default users from user_analysis_service
-        # default_users = ["User1", "User2", "User3"]  # Replace with actual default users
         for user in self.defaults:
             self.lst_users.insert(tk.END, user)
 
@@ -66,7 +65,6 @@ class UserAnalysisSettingsWindow(tk.Toplevel):
             self.lst_users.delete(selected[0])
 
     def save_settings(self):
-        # Implement saving logic for the settings
         # Extract users from listbox and save them as default users
         users = [self.lst_users.get(i) for i in range(self.lst_users.size())]
 

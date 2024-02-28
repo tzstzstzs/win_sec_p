@@ -7,6 +7,7 @@ from src.python.controllers.process_analysis_controller import ProcessAnalysisCo
 from src.python.controllers.port_controller import PortController
 from src.python.controllers.port_analysis_controller import PortAnalysisController
 from src.python.controllers.app_controller import AppController
+from src.python.controllers.apps_analysis_controller import AppsAnalysisController
 from src.python.controllers.password_policy_controller import PasswordPolicyController
 from src.python.controllers.password_policy_analysis_controller import PasswordPolicyAnalysisController
 from src.python.controllers.updates_controller import UpdatesController
@@ -23,6 +24,7 @@ class MainController:
         self.port_controller = PortController(main_window)
         self.port_analysis_controller = PortAnalysisController(main_window)
         self.app_controller = AppController(main_window)
+        self.app_analysis_controller = AppsAnalysisController(main_window)
         self.password_policy_controller = PasswordPolicyController(main_window)
         self.password_policy_analysis_controller = PasswordPolicyAnalysisController(main_window)
         self.updates_controller = UpdatesController(main_window)
@@ -49,6 +51,7 @@ class MainController:
             self.open_user_analysis_settings,
             self.open_process_analysis_settings,
             self.open_port_analysis_settings,
+            self.open_apps_analysis_settings,
             self.open_password_policy_settings,
             self.run_selected_features,
             self.export_data,
@@ -67,10 +70,7 @@ class MainController:
             self.handle_user_list()
             self.handle_processes()
             self.handle_ports()
-            if self.main_window.installed_apps_section[1].get():
-                apps = self.app_controller.retrieve_installed_apps()
-                if apps is not None:
-                    self.data_store['Installed Apps'] = apps
+            self.handle_apps()
             self.handle_password_policy()
             if self.main_window.installed_updates_section[1].get():
                 updates = self.updates_controller.retrieve_updates()
@@ -150,6 +150,30 @@ class MainController:
         if port_analysis_result is not None:
             self.all_results['Port Analysis Result'] = port_analysis_result
 
+    def handle_apps(self):
+        """
+        Handles the retrieval and storage of installed apps data.
+        """
+        if not self.main_window.installed_apps_section[1].get():
+            return
+        apps = self.app_controller.retrieve_installed_apps()
+        if apps is None:
+            return
+        self.data_store['Installed Apps'] = apps
+        if self.main_window.installed_apps_section[3].get():
+            self.analyze_apps(apps)
+
+    def analyze_apps(self, apps):
+        """
+        Analyzes the installed apps data.
+        Parameters:
+            apps (list): The list of applications to be analyzed.
+            :param apps:
+        """
+        apps_analysis_result = self.app_analysis_controller.perform_apps_analysis(apps)
+        if apps_analysis_result is not None:
+            self.all_results['Apps Analysis Result'] = apps_analysis_result
+
     def handle_password_policy(self):
         if not self.main_window.password_policy_section[1].get():
             return
@@ -204,17 +228,17 @@ class MainController:
         except Exception as e:
             self.handle_controller_error(e, "process analysis")
 
-    def open_port_analysis_settings(self):
-        try:
-            self.port_analysis_controller.open_ports_settings_window()
-        except Exception as e:
-            self.handle_controller_error(e, "port analysis settings")
-
     def show_open_ports(self):
         try:
             self.port_controller.show_ports()
         except Exception as e:
             self.handle_controller_error(e, "open ports")
+
+    def open_port_analysis_settings(self):
+        try:
+            self.port_analysis_controller.open_ports_settings_window()
+        except Exception as e:
+            self.handle_controller_error(e, "port analysis settings")
 
     def show_open_ports_result(self):
         try:
@@ -228,8 +252,17 @@ class MainController:
         except Exception as e:
             self.handle_controller_error(e, "installed apps")
 
+    def open_apps_analysis_settings(self):
+        try:
+            self.app_analysis_controller.open_apps_analysis_settings()
+        except Exception as e:
+            self.handle_controller_error(e, "apps analysis settings")
+
     def show_installed_apps_result(self):
-        pass
+        try:
+            self.app_analysis_controller.show_apps_analysis()
+        except Exception as e:
+            self.handle_controller_error(e, "apps analysis")
 
     def show_password_policy(self):
         try:

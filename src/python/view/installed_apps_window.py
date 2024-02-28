@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from src.python.view.sort_utils import sort_by  # Import the sort_by function
 
+
 class InstalledAppsWindow(tk.Toplevel):
     def __init__(self, parent, apps_data):
         super().__init__(parent)

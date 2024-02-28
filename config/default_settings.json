@@ -1,8 +1,11 @@
 {
     "default_users": [
         "Alapértelmezett fiók",
+        "DefaultAccount",
         "Rendszergazda",
+        "Admin",
         "Vendég",
+        "Guest",
         "VDAGUtilityAccount",
         "test_project1",
         "test_project2"
@@ -30,5 +33,41 @@
         "lockout_threshold": "5",
         "lockout_duration": "30",
         "lockout_obs_win": "30"
-    }
+    },
+    "authorized_apps": [
+        {
+            "Name": "Visual Studio Community 2019",
+            "Version": "16.11.25",
+            "Vendor": "Microsoft Corporation"
+        },
+        {
+            "Name": "Google Chrome",
+            "Version": "121.0.6167.185",
+            "Vendor": "Google LLC"
+        },
+        {
+            "Name": "IntelliJ IDEA 2022.2.3",
+            "Version": "222.4345.14",
+            "Vendor": "JetBrains s.r.o."
+        },
+        {
+            "Name": "Microsoft Edge",
+            "Version": "121.0.2277.128",
+            "Vendor": "Microsoft Corporation"
+        },
+        {
+            "Name": "Microsoft Edge Update",
+            "Version": "1.3.183.29",
+            "Vendor": null
+        },
+        {
+            "Name": "A Microsoft Edge WebView2 futtatĂłkĂ¶rnyezete",
+            "Version": "121.0.2277.112",
+            "Vendor": "Microsoft Corporation"
+        }
+    ],
+    "suspicious_ports": [
+        "443",
+        "445"
+    ]
 }

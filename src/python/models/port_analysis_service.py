@@ -4,7 +4,7 @@ import logging
 class PortAnalysisService:
     def __init__(self, port_data, port_settings):
         self.port_data = port_data
-        self.port_settings = [int(port) for port in port_settings if port.isdigit()]
+        self.port_settings = [int(port) for port in port_settings if port.isdigit()] if port_settings else []
         logging.info("PortAnalysisService initialized with port data and settings [service]")
 
     def analyze_ports(self):

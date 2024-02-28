@@ -38,7 +38,7 @@ class PortAnalysisController:
                 messagebox.showerror("Error", "An error occurred while displaying the ports analysis.")
         else:
             logging.warning("No ports analysis data available to display [controller].")
-            messagebox.showinfo("User Analysis", "No user analysis data available.")
+            messagebox.showinfo("User Analysis", "No port analysis data available.")
 
     def open_ports_settings_window(self):
         # Check if the settings window is already open
