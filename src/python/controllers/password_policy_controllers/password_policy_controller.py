@@ -1,6 +1,6 @@
 import logging
-from src.python.view.password_policy_window import PasswordPolicyWindow
-from src.python.models.password_policy_service import get_password_policy
+from src.python.view.password_policy_view.password_policy_window import PasswordPolicyWindow
+from src.python.models.password_policy_models.password_policy_service import get_password_policy
 from tkinter import messagebox
 
 

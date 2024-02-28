@@ -1,6 +1,6 @@
 import logging
-from src.python.view.user_list_window import UserListWindow
-from src.python.models.user_service import get_windows_users_with_powershell
+from src.python.view.user_view.user_list_window import UserListWindow
+from src.python.models.user_models.user_service import get_windows_users_with_powershell
 from tkinter import messagebox
 
 

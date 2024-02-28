@@ -6,7 +6,7 @@ import logging
 
 def get_active_ports_with_powershell():
     current_dir = os.path.dirname(__file__)
-    script_path = os.path.join(current_dir, '..', '..', 'powershell', 'get_active_ports.ps1')
+    script_path = os.path.join(current_dir, '../..', '..', 'powershell', 'get_active_ports.ps1')
 
     try:
         result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-File", script_path],

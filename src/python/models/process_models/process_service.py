@@ -10,7 +10,7 @@ def custom_json_parser(obj):
 def get_running_processes():
     # Define the PowerShell script path
     current_dir = os.path.dirname(__file__)
-    get_processes_ps_script_path = os.path.join(current_dir, '..', '..', 'powershell', 'get_process_info.ps1')
+    get_processes_ps_script_path = os.path.join(current_dir, '../..', '..', 'powershell', 'get_process_info.ps1')
     get_processes_ps_script_path = os.path.abspath(get_processes_ps_script_path)
 
     # Read the PowerShell script content from the file

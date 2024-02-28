@@ -1,6 +1,6 @@
 import logging
-from src.python.view.installed_apps_window import InstalledAppsWindow
-from src.python.models.installed_apps_service import get_installed_apps
+from src.python.view.installed_apps_view.apps_window import InstalledAppsWindow
+from src.python.models.installed_apps_models.apps_service import get_installed_apps
 from tkinter import messagebox
 
 

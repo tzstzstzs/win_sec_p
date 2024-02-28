@@ -1,7 +1,7 @@
 import logging
-from src.python.view.process_analysis_window import ProcessAnalysisWindow
-from src.python.models.process_analysis_service import ProcessAnalysisService
-from src.python.view.process_settings_window import ProcessSettingsWindow
+from src.python.view.process_view.process_analysis_window import ProcessAnalysisWindow
+from src.python.models.process_models.process_analysis_service import ProcessAnalysisService
+from src.python.view.process_view.process_settings_window import ProcessSettingsWindow
 from src.python.models.settings_manager import SettingsManager
 from tkinter import messagebox
 

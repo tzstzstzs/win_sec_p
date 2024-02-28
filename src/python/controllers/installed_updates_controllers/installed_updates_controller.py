@@ -1,6 +1,6 @@
 import logging
-from src.python.view.update_list_window import UpdateListWindow
-from src.python.models.updates_service import get_installed_updates_with_powershell
+from src.python.view.installed_updates_view.update_list_window import UpdateListWindow
+from src.python.models.installed_updates_models.updates_service import get_installed_updates_with_powershell
 from tkinter import messagebox
 
 

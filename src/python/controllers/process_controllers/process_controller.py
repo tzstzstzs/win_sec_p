@@ -1,6 +1,6 @@
 import logging
-from src.python.view.process_list_window import ProcessListWindow
-from src.python.models.process_service import get_running_processes
+from src.python.view.process_view.process_list_window import ProcessListWindow
+from src.python.models.process_models.process_service import get_running_processes
 from tkinter import messagebox
 
 

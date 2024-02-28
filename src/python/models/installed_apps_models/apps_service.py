@@ -1,4 +1,4 @@
-# src/python/services/installed_apps_service.py
+# src/python/services/apps_service.py
 import os
 import subprocess
 import json
@@ -8,7 +8,7 @@ import logging
 def get_installed_apps():
     # Define the PowerShell script path
     current_dir = os.path.dirname(__file__)
-    get_apps_ps_script_path = os.path.join(current_dir, '..', '..', 'powershell', 'get_installed_apps.ps1')
+    get_apps_ps_script_path = os.path.join(current_dir, '../..', '..', 'powershell', 'get_installed_apps.ps1')
     get_apps_ps_script_path = os.path.abspath(get_apps_ps_script_path)
 
     # Read the PowerShell script content from the file

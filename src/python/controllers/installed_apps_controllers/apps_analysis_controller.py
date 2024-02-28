@@ -1,7 +1,7 @@
 import logging
-from src.python.view.apps_analysis_window import AppsAnalysisWindow
-from src.python.models.apps_analysis_service import AppsAnalysisService
-from src.python.view.apps_analysis_settings_window import AppsAnalysisSettingsWindow
+from src.python.view.installed_apps_view.apps_analysis_window import AppsAnalysisWindow
+from src.python.models.installed_apps_models.apps_analysis_service import AppsAnalysisService
+from src.python.view.installed_apps_view.apps_analysis_settings_window import AppsAnalysisSettingsWindow
 from src.python.models.settings_manager import SettingsManager
 from tkinter import messagebox
 

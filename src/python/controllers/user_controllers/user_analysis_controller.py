@@ -1,7 +1,7 @@
 import logging
-from src.python.view.user_analysis_window import UserAnalysisWindow
-from src.python.models.user_analysis_service import UserAnalysisService
-from src.python.view.user_analysis_settings_window import UserAnalysisSettingsWindow
+from src.python.view.user_view.user_analysis_window import UserAnalysisWindow
+from src.python.models.user_models.user_analysis_service import UserAnalysisService
+from src.python.view.user_view.user_analysis_settings_window import UserAnalysisSettingsWindow
 from src.python.models.settings_manager import SettingsManager
 from tkinter import messagebox
 

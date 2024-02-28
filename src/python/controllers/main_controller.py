@@ -1,16 +1,16 @@
 import logging
 from tkinter import messagebox
-from src.python.controllers.user_controller import UserController
-from src.python.controllers.user_analysis_controller import UserAnalysisController
-from src.python.controllers.process_controller import ProcessController
-from src.python.controllers.process_analysis_controller import ProcessAnalysisController
-from src.python.controllers.port_controller import PortController
-from src.python.controllers.port_analysis_controller import PortAnalysisController
-from src.python.controllers.app_controller import AppController
-from src.python.controllers.apps_analysis_controller import AppsAnalysisController
-from src.python.controllers.password_policy_controller import PasswordPolicyController
-from src.python.controllers.password_policy_analysis_controller import PasswordPolicyAnalysisController
-from src.python.controllers.updates_controller import UpdatesController
+from src.python.controllers.user_controllers.user_controller import UserController
+from src.python.controllers.user_controllers.user_analysis_controller import UserAnalysisController
+from src.python.controllers.process_controllers.process_controller import ProcessController
+from src.python.controllers.process_controllers.process_analysis_controller import ProcessAnalysisController
+from src.python.controllers.open_ports_controllers.open_ports_controller import PortController
+from src.python.controllers.open_ports_controllers.open_ports_analysis_controller import PortAnalysisController
+from src.python.controllers.installed_apps_controllers.apps_controller import AppController
+from src.python.controllers.installed_apps_controllers.apps_analysis_controller import AppsAnalysisController
+from src.python.controllers.password_policy_controllers.password_policy_controller import PasswordPolicyController
+from src.python.controllers.password_policy_controllers.password_policy_analysis_controller import PasswordPolicyAnalysisController
+from src.python.controllers.installed_updates_controllers.installed_updates_controller import UpdatesController
 from src.python.controllers.export_controller import ExportController
 
 

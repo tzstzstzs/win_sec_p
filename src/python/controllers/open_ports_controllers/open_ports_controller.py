@@ -1,6 +1,6 @@
 import logging
-from src.python.view.port_list_window import PortListWindow
-from src.python.models.port_service import get_active_ports_with_powershell
+from src.python.view.open_ports_view.open_ports_list_window import PortListWindow
+from src.python.models.open_ports_models.open_ports_service import get_active_ports_with_powershell
 from tkinter import messagebox
 
 

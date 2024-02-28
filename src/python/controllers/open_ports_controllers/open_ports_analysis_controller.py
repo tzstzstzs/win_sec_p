@@ -1,7 +1,7 @@
 import logging
-from src.python.view.port_analysis_window import PortAnalysisWindow
-from src.python.models.port_analysis_service import PortAnalysisService
-from src.python.view.port_analysis_settings_window import PortAnalysisSettingsWindow
+from src.python.view.open_ports_view.open_ports_analysis_window import PortAnalysisWindow
+from src.python.models.open_ports_models.open_ports_analysis_service import PortAnalysisService
+from src.python.view.open_ports_view.open_ports_analysis_settings_window import PortAnalysisSettingsWindow
 from src.python.models.settings_manager import SettingsManager
 from tkinter import messagebox
 
