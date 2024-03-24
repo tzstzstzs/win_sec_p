@@ -1,4 +1,0 @@
-$Listener = [System.Net.Sockets.TcpListener]8080
-$Listener.Start()
-
-$Listener.Stop()

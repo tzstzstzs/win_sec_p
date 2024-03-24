@@ -1,13 +1,38 @@
 import logging
+from src.python.models.analysis_service_base import AnalysisServiceBase
 
 
-class ProcessAnalysisService:
-    def __init__(self, process_data, settings):
-        self.process_data = process_data
-        self.settings = settings
-        self.suspicious_processes = {'high_resource': [], 'unusual_activity': []}
+class ProcessAnalysisService(AnalysisServiceBase):
+    suspicious_processes = {'high_resource': [], 'unusual_activity': []}
 
-    def is_high_resource_process(self, process):
+    def analyze(self):
+        """
+        Performs all analyses on each process and updates the suspicious_processes collection.
+        """
+        for process in self.data:
+            try:
+                simplified_process = {'ProcessName': process['ProcessName'], 'Id': process['Id']}
+
+                if self._is_high_resource_process(process):
+                    self.suspicious_processes['high_resource'].append(simplified_process)
+
+                if self._is_unusual_process(process):
+                    self.suspicious_processes['unusual_activity'].append(simplified_process)
+
+            except KeyError as e:
+                logging.error(f"KeyError in process analysis for process {process.get('ProcessName', 'Unknown')}: {e}",
+                              exc_info=True)
+            except TypeError as e:
+                logging.error(f"TypeError in process analysis for process {process.get('ProcessName', 'Unknown')}: {e}",
+                              exc_info=True)
+            except Exception as e:
+                logging.error(
+                    f"Unexpected error in process analysis for process {process.get('ProcessName', 'Unknown')}: {e}",
+                    exc_info=True)
+
+        return self.suspicious_processes
+
+    def _is_high_resource_process(self, process):
         try:
             # Retrieve the thresholds and ensure they are not lists
             cpu_threshold = self.settings.get('cpu_threshold', ['8000.0'])
@@ -35,45 +60,14 @@ class ProcessAnalysisService:
                 f"Unexpected error in is_high_resource_process for process {process.get('ProcessName', 'Unknown')}: {e}")
             return False
 
-    def is_unusual_process(self, process):
-        # Checks if the process is unusual
+    def _is_unusual_process(self, process):
         trusted_directories = self.settings.get('trusted_directories', ['C:\\Windows\\', 'C:\\Program Files\\'])
         common_parent_ids = self.settings.get('common_parent_ids', [0, 4])
 
         executable_path = process['ExecutablePath']
         parent_id = process['ParentId']
         return (not any(trusted_dir in executable_path for trusted_dir in trusted_directories)) or (
-                    parent_id not in common_parent_ids)
-
-    def analyze_processes(self):
-        """
-        Performs all analyses on each process and updates the suspicious_processes collection.
-        """
-        for process in self.process_data:
-            try:
-                simplified_process = {'ProcessName': process['ProcessName'], 'Id': process['Id']}
-
-                if self.is_high_resource_process(process):
-                    self.suspicious_processes['high_resource'].append(simplified_process)
-
-                if self.is_unusual_process(process):
-                    self.suspicious_processes['unusual_activity'].append(simplified_process)
-
-            except KeyError as e:
-                # Log an error when a process dictionary key is missing
-                logging.error(f"KeyError in process analysis for process {process.get('ProcessName', 'Unknown')}: {e}",
-                              exc_info=True)
-            except TypeError as e:
-                # Log an error when there is a type mismatch in comparisons
-                logging.error(f"TypeError in process analysis for process {process.get('ProcessName', 'Unknown')}: {e}",
-                              exc_info=True)
-            except Exception as e:
-                # Catch-all for any other exceptions that were not anticipated
-                logging.error(
-                    f"Unexpected error in process analysis for process {process.get('ProcessName', 'Unknown')}: {e}",
-                    exc_info=True)
-
-        return self.suspicious_processes
+                parent_id not in common_parent_ids)
 
     def _parse_value(self, value):
         """Converts a value to a float if possible, otherwise logs and returns None."""

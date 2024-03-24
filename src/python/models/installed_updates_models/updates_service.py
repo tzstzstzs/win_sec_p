@@ -5,7 +5,6 @@ import logging
 
 
 def get_installed_updates_with_powershell():
-    # Read the PowerShell script content from the file
     current_dir = os.path.dirname(__file__)
     get_updates_ps_script_path = os.path.join(current_dir, '../..', '..', 'powershell', 'get_installed_updates.ps1')
     get_updates_ps_script_path = os.path.abspath(get_updates_ps_script_path)
@@ -39,13 +38,3 @@ def get_installed_updates_with_powershell():
     except Exception as e:
         logging.error(f"Unexpected error [service]: {e}")
         raise
-
-# if __name__ == "__main__":
-#     try:
-#         # Test the get_installed_updates_with_powershell function
-#         updates = get_installed_updates_with_powershell()
-#         print("Retrieved installed updates:")
-#         for update in updates:
-#             print(update)
-#     except Exception as e:
-#         print("An error occurred:", e)

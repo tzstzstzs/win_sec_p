@@ -1,55 +1,26 @@
 import tkinter as tk
-from tkinter import ttk
-from src.python.view.sort_utils import sort_by
 import logging
+from src.python.view.data_window_base import DataWindowBase
 
 
-class ProcessListWindow(tk.Toplevel):
+class ProcessListWindow(DataWindowBase):
     def __init__(self, parent, processes_data):
-        super().__init__(parent)
-        self.title('Running Processes')
-        self.geometry('1400x600')  # Adjusted for additional columns
-        self.processes_data = processes_data
-        self.sort_order = {col: True for col in ('ProcessName', 'Id', 'CPU', 'WorkingSet', 'Parent', 'ExecutablePath', 'AssociatedUser')}
-        self.create_process_list()
-
-        # Bind the treeview click event
-        self.tree.bind('<ButtonRelease-1>', self.on_tree_click)
-
-    def create_process_list(self):
+        title = 'Running Processes'
+        geometry = '1400x600'
         columns = ('ProcessName', 'Id', 'CPU', 'WorkingSet', 'Parent', 'ExecutablePath', 'AssociatedUser')
-        self.tree = ttk.Treeview(self, columns=columns, show='headings')
-        self.vsb = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
-        self.tree.configure(yscrollcommand=self.vsb.set)
+        super().__init__(parent, processes_data, title, geometry, columns)
 
-        for col in columns:
-            self.tree.column(col, width=200 if col in ['ExecutablePath', 'AssociatedUser'] else 100)
-            self.tree.heading(col, text=col, command=lambda _col=col: self.on_column_click(_col))
+    def get_column_width(self, column):
+        column_widths = {'ProcessName': 150, 'Id': 100, 'CPU': 100, 'WorkingSet': 100, 'Parent': 100,
+                         'ExecutablePath': 300, 'AssociatedUser': 150}
+        return column_widths.get(column, 100)
 
-        self.populate_process_list()
-        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.vsb.pack(side=tk.RIGHT, fill=tk.Y)
-
-    def on_column_click(self, col):
-        self.sort_order = sort_by(self.tree, col, self.sort_order)
-
-    def on_tree_click(self, event):
-        # Get the item clicked
-        item_id = self.tree.identify_row(event.y)
-        if item_id:
-            # Get the item's values
-            item_values = self.tree.item(item_id, 'values')
-            # Format the values as a string
-            text_to_copy = ', '.join(map(str, item_values))
-            # Copy the text to clipboard
-            self.clipboard_clear()
-            self.clipboard_append(text_to_copy)
-            logging.info(f"Copied to clipboard: {text_to_copy}")
-
-    def populate_process_list(self):
-        parent_nodes = {}
-
-        for proc in self.processes_data:
+    def populate_list(self):
+        # Clear existing data in the list
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        # Populate the treeview with the applications data
+        for proc in self.data:
             try:
                 parent_id = proc.get('ParentId', None)
                 proc_id = proc.get('Id', None)

@@ -9,10 +9,8 @@ class ExportController:
         self.main_controller = main_controller
 
     def export_data(self):
-        # Collect the data for export
         data_to_export = self.main_controller.data_store
 
-        # Ask the user for a file location
         file_path = filedialog.asksaveasfilename(
             defaultextension=".docx",
             filetypes=[("Word documents", "*.docx"), ("All files", "*.*")],

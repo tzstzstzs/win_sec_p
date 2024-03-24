@@ -8,16 +8,13 @@ class UpdatesAnalysisSettingsWindow(tk.Toplevel):
         self.title('Updates Analysis Settings')
         self.geometry('1000x600')
         self.save_callback = save_callback
-        # Adjusted to expect a list of strings (KB numbers)
         self.authorized_updates = defaults if isinstance(defaults, list) else []
-
         self.create_widgets()
 
     def create_widgets(self):
         # Adjusted for handling a list of strings (KB numbers)
         self.create_listbox_section('Authorized KB Numbers:', self.authorized_updates, 0)
 
-        # Save and Cancel buttons
         ttk.Button(self, text="Save", command=self.save_settings).grid(row=1, column=0, padx=10, pady=10)
         ttk.Button(self, text="Cancel", command=self.destroy).grid(row=1, column=1, padx=10, pady=10)
 
@@ -29,7 +26,6 @@ class UpdatesAnalysisSettingsWindow(tk.Toplevel):
         for kb in items:
             self.listbox.insert(tk.END, kb)
 
-        # Adjusted buttons for direct string list manipulation
         ttk.Button(self, text="Edit", command=self.edit_list_item).grid(row=row, column=2, padx=10, pady=10)
         ttk.Button(self, text="Delete", command=self.delete_list_item).grid(row=row, column=3, padx=10, pady=10)
         ttk.Button(self, text="Add", command=self.add_list_item).grid(row=row, column=4, padx=10, pady=10)
@@ -57,7 +53,6 @@ class UpdatesAnalysisSettingsWindow(tk.Toplevel):
             self.listbox.insert(tk.END, new_kb)
 
     def save_settings(self):
-        # Directly save the list of strings (KB numbers)
         if self.save_callback:
             self.save_callback(self.authorized_updates)
         self.destroy()

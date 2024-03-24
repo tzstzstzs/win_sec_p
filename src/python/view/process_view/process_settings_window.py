@@ -11,7 +11,6 @@ class ProcessSettingsWindow(tk.Toplevel):
         self.save_callback = save_callback
         self.defaults = defaults or {}
 
-        # Initialize variables
         self.cpu_threshold = tk.StringVar(value=self.defaults.get('cpu_threshold', '8000.0'))
         self.memory_threshold = tk.StringVar(value=self.defaults.get('memory_threshold', '1024.0'))
         self.trusted_directories = self.defaults.get('trusted_directories', ['C:\\Windows\\', 'C:\\Program Files\\'])
@@ -28,7 +27,6 @@ class ProcessSettingsWindow(tk.Toplevel):
         self.create_listbox_section('Trusted Directories:', self.trusted_directories, 2, 'trusted_directories')
         self.create_listbox_section('Common Parent IDs:', self.common_parent_ids, 3, 'common_parent_ids')
 
-        # Save and Cancel buttons
         ttk.Button(self, text="Save", command=self.save_settings).grid(row=4, column=0, padx=10, pady=10)
         ttk.Button(self, text="Cancel", command=self.destroy).grid(row=4, column=1, padx=10, pady=10)
 
@@ -43,7 +41,6 @@ class ProcessSettingsWindow(tk.Toplevel):
         for item in items:
             listbox.insert(tk.END, item)
 
-        # Additional list management buttons
         ttk.Button(self, text="Add", command=lambda: self.add_item(listbox, list_name)).grid(row=row, column=2)
         ttk.Button(self, text="Delete", command=lambda: self.delete_item(listbox, list_name)).grid(row=row, column=3)
         ttk.Button(self, text="Edit", command=lambda: self.edit_item(listbox, list_name)).grid(row=row, column=4)

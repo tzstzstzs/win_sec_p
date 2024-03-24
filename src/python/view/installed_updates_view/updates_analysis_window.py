@@ -1,32 +1,23 @@
 import tkinter as tk
-from tkinter import ttk
+from src.python.view.data_window_base import DataWindowBase
 
-class UpdatesAnalysisWindow(tk.Toplevel):
+
+class UpdatesAnalysisWindow(DataWindowBase):
     def __init__(self, parent, missing_updates_data):
-        super().__init__(parent)
-        self.title('Missing Updates')
-        self.geometry('400x600')
-        # Assuming missing_updates_data is now a list of HotFixIDs as strings
-        self.missing_updates_data = missing_updates_data
-        self.create_widgets()
+        title = 'Missing Updates'
+        geometry = '400x600'
+        columns = ('HotFixID',)
+        super().__init__(parent, missing_updates_data, title, geometry, columns)
 
-    def create_widgets(self):
-        # Adjusting the Treeview to have only one column for HotFixID
-        self.tree = ttk.Treeview(self, columns=('HotFixID',), show='headings')
-        self.tree.heading('HotFixID', text='HotFixID')
+    def get_column_width(self, column):
+        if column == 'HotFixID':
+            return 150
+        return 100
 
-        # Inserting each HotFixID into the Treeview
-        for hotfix_id in self.missing_updates_data:
+    def populate_list(self):
+        # Clear existing data in the list
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        # Populate the treeview with the missing updates data
+        for hotfix_id in self.data:
             self.tree.insert('', tk.END, values=(hotfix_id,))
-
-        self.tree.pack(expand=True, fill=tk.BOTH)
-
-if __name__ == "__main__":
-    def sample_missing_updates():
-        # Sample list of missing updates represented by their HotFixIDs
-        return ['KB123456', 'KB654321']
-
-    root = tk.Tk()
-    root.withdraw()  # Hide the main window
-    app = UpdatesAnalysisWindow(root, sample_missing_updates())
-    app.mainloop()

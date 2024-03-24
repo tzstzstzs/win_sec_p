@@ -9,15 +9,11 @@ class PasswordPolicySettingsWindow(tk.Toplevel):
         self.geometry("500x600")  # Adjusted size for additional fields
         self.save_callback = save_callback
         self.defaults = defaults if defaults is not None else {}
-
-        # Create and place widgets
         self.create_widgets()
 
     def create_widgets(self):
-        # Configure the grid layout
-        self.columnconfigure(1, weight=1)  # Makes the entry fields expand
+        self.columnconfigure(1, weight=1)
 
-        # Add widgets using grid
         ttk.Label(self, text="Maximum Logoff Time (minutes):").grid(row=0, column=0, sticky='e', padx=5, pady=5)
         self.logoff_time_entry = ttk.Entry(self)
         self.logoff_time_entry.grid(row=0, column=1, sticky='ew', padx=5, pady=5)
@@ -65,7 +61,6 @@ class PasswordPolicySettingsWindow(tk.Toplevel):
         cancel_button.grid(row=8, column=1, padx=10, pady=20, sticky='w')
 
     def is_natural_number(self, value):
-        """Check if the value is a natural number."""
         try:
             number = int(value)
             return number > 0
@@ -73,7 +68,6 @@ class PasswordPolicySettingsWindow(tk.Toplevel):
             return False
 
     def save_settings(self):
-        # Gather settings into a dictionary
         settings = {
             'logoff_time': self.logoff_time_entry.get(),
             'min_length': self.min_length_entry.get(),
@@ -85,16 +79,13 @@ class PasswordPolicySettingsWindow(tk.Toplevel):
             'lockout_obs_win': self.lockout_obs_win_entry.get()
         }
 
-        # Validate all settings are natural numbers
         if all(self.is_natural_number(settings[key]) for key in settings):
             if self.save_callback:
                 self.save_callback(settings)
-            self.destroy()  # Close the window after saving
+            self.destroy()
         else:
             messagebox.showerror("Error", "All fields must contain natural numbers (positive integers).")
 
-
-        # Call the save callback function if it's set
         if self.save_callback:
             self.save_callback(settings)
 

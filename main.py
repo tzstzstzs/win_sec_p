@@ -7,7 +7,6 @@ from src.python.controllers.main_controller import MainController
 from src.python.view.main_window import MainWindow
 from src.python.models.check_user_privileges import is_admin
 
-# Configure the root logger
 logging.basicConfig(filename='application.log', level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 

@@ -6,7 +6,7 @@ from src.python.controllers.process_controllers.process_controller import Proces
 from src.python.controllers.process_controllers.process_analysis_controller import ProcessAnalysisController
 from src.python.controllers.open_ports_controllers.open_ports_controller import PortController
 from src.python.controllers.open_ports_controllers.open_ports_analysis_controller import PortAnalysisController
-from src.python.controllers.installed_apps_controllers.apps_controller import AppController
+from src.python.controllers.installed_apps_controllers.apps_controller import AppsController
 from src.python.controllers.installed_apps_controllers.apps_analysis_controller import AppsAnalysisController
 from src.python.controllers.password_policy_controllers.password_policy_controller import PasswordPolicyController
 from src.python.controllers.password_policy_controllers.password_policy_analysis_controller import PasswordPolicyAnalysisController
@@ -24,7 +24,7 @@ class MainController:
         self.process_analysis_controller = ProcessAnalysisController(main_window)
         self.port_controller = PortController(main_window)
         self.port_analysis_controller = PortAnalysisController(main_window)
-        self.app_controller = AppController(main_window)
+        self.app_controller = AppsController(main_window)
         self.app_analysis_controller = AppsAnalysisController(main_window)
         self.password_policy_controller = PasswordPolicyController(main_window)
         self.password_policy_analysis_controller = PasswordPolicyAnalysisController(main_window)
@@ -86,7 +86,7 @@ class MainController:
         """
         if not self.main_window.user_list_section[1].get():
             return
-        users = self.user_controller.retrieve_users()
+        users = self.user_controller.retrieve_data()
         if users is None:
             return
         self.data_store['User List'] = users
@@ -99,7 +99,7 @@ class MainController:
         Parameters:
             users (list): The list of users to be analyzed.
         """
-        user_analysis_result = self.user_analysis_controller.perform_user_analysis(users)
+        user_analysis_result = self.user_analysis_controller.perform_analysis(users)
         if user_analysis_result is not None:
             self.all_results['User Analysis Result'] = user_analysis_result
 
@@ -109,7 +109,7 @@ class MainController:
         """
         if not self.main_window.running_processes_section[1].get():
             return
-        processes = self.process_controller.retrieve_processes()
+        processes = self.process_controller.retrieve_data()
         if processes is None:
             return
         self.data_store['Running Processes'] = processes
@@ -122,7 +122,7 @@ class MainController:
         Parameters:
             processes (list): The list of processes to be analyzed.
         """
-        process_analysis_result = self.process_analysis_controller.perform_process_analysis(processes)
+        process_analysis_result = self.process_analysis_controller.perform_analysis(processes)
         if process_analysis_result is not None:
             self.all_results['Process Analysis Result'] = process_analysis_result
 
@@ -132,7 +132,7 @@ class MainController:
         """
         if not self.main_window.port_list_section[1].get():
             return
-        ports = self.port_controller.retrieve_ports()
+        ports = self.port_controller.retrieve_data()
         if ports is None:
             return
         self.data_store['Open Ports'] = ports
@@ -146,7 +146,7 @@ class MainController:
             processes (list): The list of processes to be analyzed.
             :param ports:
         """
-        port_analysis_result = self.port_analysis_controller.perform_port_analysis(ports)
+        port_analysis_result = self.port_analysis_controller.perform_analysis(ports)
         if port_analysis_result is not None:
             self.all_results['Port Analysis Result'] = port_analysis_result
 
@@ -156,7 +156,7 @@ class MainController:
         """
         if not self.main_window.installed_apps_section[1].get():
             return
-        apps = self.app_controller.retrieve_installed_apps()
+        apps = self.app_controller.retrieve_data()
         if apps is None:
             return
         self.data_store['Installed Apps'] = apps
@@ -170,14 +170,14 @@ class MainController:
             apps (list): The list of applications to be analyzed.
             :param apps:
         """
-        apps_analysis_result = self.app_analysis_controller.perform_apps_analysis(apps)
+        apps_analysis_result = self.app_analysis_controller.perform_analysis(apps)
         if apps_analysis_result is not None:
             self.all_results['Apps Analysis Result'] = apps_analysis_result
 
     def handle_password_policy(self):
         if not self.main_window.password_policy_section[1].get():
             return
-        password_policy = self.password_policy_controller.retrieve_password_policy()
+        password_policy = self.password_policy_controller.retrieve_data()
         if password_policy is None:
             return
         self.data_store['Password Policy'] = password_policy
@@ -186,7 +186,7 @@ class MainController:
         self.analyze_password_policy(password_policy)
 
     def analyze_password_policy(self, password_policy):
-        password_policy_result = self.password_policy_analysis_controller.perform_password_policy_analysis(
+        password_policy_result = self.password_policy_analysis_controller.perform_analysis(
             password_policy)
         if password_policy_result is not None:
             self.all_results['Password Policy Result'] = password_policy_result
@@ -194,7 +194,7 @@ class MainController:
     def handle_installed_updates(self):
         if not self.main_window.installed_updates_section[1].get():
             return
-        installed_updates = self.updates_controller.retrieve_updates()
+        installed_updates = self.updates_controller.retrieve_data()
         if installed_updates is None:
             return
         self.data_store['Installed Updates'] = installed_updates
@@ -203,116 +203,116 @@ class MainController:
         self.analyze_installed_updates(installed_updates)
 
     def analyze_installed_updates(self, installed_updates):
-        installed_updates_result = self.updates_analysis_controller.perform_updates_analysis(installed_updates)
+        installed_updates_result = self.updates_analysis_controller.perform_analysis(installed_updates)
         if installed_updates_result is not None:
             self.all_results['Installed Updates Result'] = installed_updates_result
 
     # Wrapper functions for controllers
     def show_users(self):
         try:
-            self.user_controller.show_users()
+            self.user_controller.show_data()
         except Exception as e:
             self.handle_controller_error(e, "users")
 
     def open_user_analysis_settings(self):
         try:
-            self.user_analysis_controller.open_user_analysis_settings()
+            self.user_analysis_controller.open_settings_window()
         except Exception as e:
             self.handle_controller_error(e, "user analysis settings")
 
     def show_users_result(self):
         try:
-            self.user_analysis_controller.show_user_analysis()
+            self.user_analysis_controller.show_analysis_results()
         except Exception as e:
             self.handle_controller_error(e, "user analysis")
 
     def show_processes(self):
         try:
-            self.process_controller.show_processes()
+            self.process_controller.show_data()
         except Exception as e:
             self.handle_controller_error(e, "processes")
 
     def open_process_analysis_settings(self):
         try:
-            self.process_analysis_controller.open_process_analysis_settings()
+            self.process_analysis_controller.open_settings_window()
         except Exception as e:
             self.handle_controller_error(e, "process analysis settings")
 
     def show_processes_result(self):
         try:
-            self.process_analysis_controller.show_process_analysis()
+            self.process_analysis_controller.show_analysis_results()
         except Exception as e:
             self.handle_controller_error(e, "process analysis")
 
     def show_open_ports(self):
         try:
-            self.port_controller.show_ports()
+            self.port_controller.show_data()
         except Exception as e:
             self.handle_controller_error(e, "open ports")
 
     def open_port_analysis_settings(self):
         try:
-            self.port_analysis_controller.open_ports_settings_window()
+            self.port_analysis_controller.open_settings_window()
         except Exception as e:
             self.handle_controller_error(e, "port analysis settings")
 
     def show_open_ports_result(self):
         try:
-            self.port_analysis_controller.open_analysis_window()
+            self.port_analysis_controller.show_analysis_results()
         except Exception as e:
             self.handle_controller_error(e, "port analysis")
 
     def show_installed_apps(self):
         try:
-            self.app_controller.show_installed_apps()
+            self.app_controller.show_data()
         except Exception as e:
             self.handle_controller_error(e, "installed apps")
 
     def open_apps_analysis_settings(self):
         try:
-            self.app_analysis_controller.open_apps_analysis_settings()
+            self.app_analysis_controller.open_settings_window()
         except Exception as e:
             self.handle_controller_error(e, "apps analysis settings")
 
     def show_installed_apps_result(self):
         try:
-            self.app_analysis_controller.show_apps_analysis()
+            self.app_analysis_controller.show_analysis_results()
         except Exception as e:
             self.handle_controller_error(e, "apps analysis")
 
     def show_password_policy(self):
         try:
-            self.password_policy_controller.show_password_policy()
+            self.password_policy_controller.show_data()
         except Exception as e:
             self.handle_controller_error(e, "password policy")
 
     def open_password_policy_settings(self):
         try:
-            self.password_policy_analysis_controller.open_password_policy_settings()
+            self.password_policy_analysis_controller.open_settings_window()
         except Exception as e:
             self.handle_controller_error(e, "password policy settings")
 
     def show_password_policy_result(self):
         try:
-            self.password_policy_analysis_controller.show_password_policy_analysis()
+            self.password_policy_analysis_controller.show_analysis_results()
         except Exception as e:
             self.handle_controller_error(e, "password policy analysis")
 
     def show_installed_updates(self):
         try:
-            self.updates_controller.show_updates()
+            self.updates_controller.show_data()
         except Exception as e:
             self.handle_controller_error(e, "installed updates")
 
     def open_installed_updates_settings(self):
         try:
-            self.updates_analysis_controller.open_updates_analysis_settings()
+            self.updates_analysis_controller.open_settings_window()
         except Exception as e:
             self.handle_controller_error(e, "installed updates settings")
 
     def show_installed_updates_result(self):
         try:
-            self.updates_analysis_controller.show_updates_analysis()
+            self.updates_analysis_controller.show_analysis_results()
         except Exception as e:
             self.handle_controller_error(e, "installed updates analysis")
 

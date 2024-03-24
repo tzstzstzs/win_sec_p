@@ -1,26 +1,28 @@
 import logging
+from src.python.models.analysis_service_base import AnalysisServiceBase
 
 
-class UpdatesAnalysisService:
-    def __init__(self, installed_updates_data, authorized_updates_settings):
-        self.installed_updates_data = installed_updates_data
-        self.authorized_updates_settings = authorized_updates_settings
-        logging.info(
-            "UpdatesAnalysisService initialized with installed updates data and authorized updates settings [service]")
-
-    def analyze_updates(self):
+class UpdatesAnalysisService(AnalysisServiceBase):
+    def analyze(self):
         missing_updates = []
 
-        # If authorized_updates_settings is a list of strings (KB numbers), use directly
-        authorized_updates_set = set(self.authorized_updates_settings)
+        try:
+            # self.settings must list of strings (KB numbers)
+            authorized_updates_set = set(self.settings)
+            installed_updates_set = set()
+            for update in self.data:
+                try:
+                    installed_updates_set.add(update['HotFixID'])
+                except KeyError as e:
+                    logging.error(f"KeyError accessing 'HotFixID' in update data: {e} [service]")
+                except TypeError as e:
+                    logging.error(f"TypeError with update data, expected dict got {type(update)}: {e} [service]")
 
-        # Assuming installed_updates_data is a list of dictionaries where 'HotFixID' contains the KB number
-        installed_updates_set = {update['HotFixID'] for update in self.installed_updates_data}
+            # Identify missing updates by comparing the sets
+            missing_updates_set = authorized_updates_set - installed_updates_set
+            missing_updates.extend(list(missing_updates_set))
 
-        # Identify missing updates by comparing sets
-        missing_updates_set = authorized_updates_set - installed_updates_set
-
-        # Return a list of missing HotFixID as strings
-        missing_updates.extend(list(missing_updates_set))
+        except Exception as e:
+            logging.exception(f"Unexpected error during updates analysis: {e} [service]")
 
         return missing_updates

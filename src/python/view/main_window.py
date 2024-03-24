@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, scrolledtext
+from tkinter import ttk
 from ttkthemes import ThemedTk
 from src.python.view.style_config import THEME_NAME, MAIN_WINDOW_TITLE, WINDOW_SIZE, BUTTON_STYLE
 import platform
@@ -19,7 +19,7 @@ class MainWindow(ThemedTk):
         self.create_widgets()
         self.check_user_status()
 
-        # Callbacks to be set later
+        # Callbacks to be set
         self.on_show_users = None
         self.on_show_processes = None
         self.on_show_open_ports = None
@@ -59,14 +59,7 @@ class MainWindow(ThemedTk):
             select_all_frame, text="", variable=self.select_all_analyze_var,
             command=lambda: self.toggle_select_all(self.select_all_analyze_var, retrieve=False),
             style='Bold.TCheckbutton')
-
-        # Select All for Analyze Checkboxes
-        self.select_all_analyze_var = tk.BooleanVar(value=False)
-        self.select_all_analyze_checkbox = ttk.Checkbutton(
-            select_all_frame, text="", variable=self.select_all_analyze_var,
-            command=lambda: self.toggle_select_all(self.select_all_analyze_var, retrieve=False),
-            style='Bold.TCheckbutton')
-        self.select_all_analyze_checkbox.pack(side='right', padx=55)
+        self.select_all_analyze_checkbox.pack(side='right', padx=60)
 
         # Select All for Retrieve Checkboxes
         self.select_all_retrieve_var = tk.BooleanVar(value=False)
@@ -74,7 +67,7 @@ class MainWindow(ThemedTk):
             select_all_frame, text="", variable=self.select_all_retrieve_var,
             command=lambda: self.toggle_select_all(self.select_all_retrieve_var, retrieve=True),
             style='Bold.TCheckbutton')
-        self.select_all_retrieve_checkbox.pack(side='right', padx=153)
+        self.select_all_retrieve_checkbox.pack(side='left', padx=206)
 
         sections = [
             ('User List', self.show_users, self.show_users_result, self.open_user_analysis_settings),
@@ -206,7 +199,7 @@ class MainWindow(ThemedTk):
 
     def open_installed_updates_settings(self):
         if self.on_open_installed_updates_settings:
-            self.open_installed_updates_settings()
+            self.on_open_installed_updates_settings()
 
     def show_installed_updates_result(self):
         if self.on_show_installed_updates_result:
@@ -217,8 +210,7 @@ class MainWindow(ThemedTk):
         for section in ['user_list', 'running_processes', 'port_list', 'installed_apps', 'password_policy',
                         'installed_updates']:
             section_obj = getattr(self, f"{section}_section")
-            section_var = section_obj[1] if retrieve else section_obj[
-                3]  # retrieve checkbox if retrieve=True else analyze checkbox
+            section_var = section_obj[1] if retrieve else section_obj[3]
             section_var.set(is_selected)
 
     def run_selected_features(self):

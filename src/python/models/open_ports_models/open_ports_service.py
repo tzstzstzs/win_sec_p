@@ -17,11 +17,10 @@ def get_active_ports_with_powershell():
         if isinstance(ports_data, dict):
             ports_data = [ports_data]
 
-        # Convert port numbers to integers
         for port in ports_data:
-            if 'LocalPort' in port:  # Assuming 'LocalPort' is a key in the dictionaries
+            if 'LocalPort' in port:
                 port['LocalPort'] = int(port['LocalPort'])
-            if 'RemotePort' in port:  # Assuming 'RemotePort' is a key in the dictionaries
+            if 'RemotePort' in port:
                 port['RemotePort'] = int(port['RemotePort'])
 
         logging.info("Ports data retrieved [service]    ")

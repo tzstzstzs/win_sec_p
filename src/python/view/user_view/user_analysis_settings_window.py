@@ -12,14 +12,12 @@ class UserAnalysisSettingsWindow(tk.Toplevel):
         self.populate_default_users()
 
     def create_widgets(self):
-        # User list label and listbox
         self.lbl_users = tk.Label(self, text="Default Users")
         self.lbl_users.grid(row=0, column=0, padx=10, pady=10)
 
         self.lst_users = tk.Listbox(self)
         self.lst_users.grid(row=1, column=0, padx=10, pady=10)
 
-        # User entry and buttons for add, modify, delete
         self.user_entry = tk.Entry(self)
         self.user_entry.grid(row=2, column=0, padx=10, pady=10)
 
@@ -32,7 +30,6 @@ class UserAnalysisSettingsWindow(tk.Toplevel):
         self.btn_delete_user = tk.Button(self, text="Delete", command=self.delete_user)
         self.btn_delete_user.grid(row=4, column=1, padx=10, pady=10)
 
-        # Save and Cancel buttons
         self.btn_save = tk.Button(self, text="Save and exit", command=self.save_settings)
         self.btn_save.grid(row=5, column=0, padx=10, pady=10)
 
@@ -40,7 +37,6 @@ class UserAnalysisSettingsWindow(tk.Toplevel):
         self.btn_cancel.grid(row=5, column=1, padx=10, pady=10)
 
     def populate_default_users(self):
-        # Populate the listbox with default users from user_analysis_service
         for user in self.defaults:
             self.lst_users.insert(tk.END, user)
 
@@ -65,12 +61,9 @@ class UserAnalysisSettingsWindow(tk.Toplevel):
             self.lst_users.delete(selected[0])
 
     def save_settings(self):
-        # Extract users from listbox and save them as default users
         users = [self.lst_users.get(i) for i in range(self.lst_users.size())]
 
-        # Save users to user_analysis_controller
         if self.save_callback:
             self.save_callback(users)
 
-        print("Saving settings:", users)
         self.destroy()

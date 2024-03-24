@@ -6,12 +6,11 @@ class ProcessAnalysisWindow(tk.Toplevel):
     def __init__(self, parent, analysis_result):
         super().__init__(parent)
         self.title('Process Analysis Result')
-        self.geometry('800x300')  # Note the lowercase 'x' in the geometry string
+        self.geometry('800x300')
         self.analysis_result = analysis_result
         self.create_result_list()
 
     def create_result_list(self):
-        # Create a notebook widget
         notebook = ttk.Notebook(self)
         notebook.pack(expand=True, fill='both')
 
@@ -33,19 +32,7 @@ class ProcessAnalysisWindow(tk.Toplevel):
         tree.column('Process Name', width=400)
         tree.column('ID', width=100)
 
-        # Add data to the tree
         for process in processes:
             tree.insert('', tk.END, values=(process['ProcessName'], process['Id']))
 
-        # Pack the Treeview widget
         tree.pack(expand=True, fill='both')
-
-# if __name__ == "__main__":
-#     # Example usage
-#     dummy_results = {
-#         'high_resource': [{'ProcessName': 'ProcessA', 'Id': 1}],
-#         'unusual_activity': [{'ProcessName': 'ProcessB', 'Id': 2}]
-#     }
-#     root = tk.Tk()
-#     app = ProcessAnalysisWindow(root, analysis_result=dummy_results)
-#     root.mainloop()

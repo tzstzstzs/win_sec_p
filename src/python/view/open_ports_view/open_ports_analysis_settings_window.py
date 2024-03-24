@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 
+
 class PortAnalysisSettingsWindow(tk.Toplevel):
     def __init__(self, parent, save_callback=None, defaults=None):
         super().__init__(parent)
@@ -11,10 +12,8 @@ class PortAnalysisSettingsWindow(tk.Toplevel):
         self.create_widgets()
 
     def create_widgets(self):
-        # Vulnerable Ports
         self.create_listbox_section('Vulnerable Ports:', self.vulnerable_ports, 0, 'vulnerable_ports')
 
-        # Save and Cancel buttons
         ttk.Button(self, text="Save", command=self.save_settings).grid(row=1, column=0, padx=10, pady=10)
         ttk.Button(self, text="Cancel", command=self.destroy).grid(row=1, column=1, padx=10, pady=10)
 
@@ -25,10 +24,10 @@ class PortAnalysisSettingsWindow(tk.Toplevel):
         for item in items:
             self.listbox.insert(tk.END, item)
 
-        # Additional list management buttons
         ttk.Button(self, text="Add", command=lambda: self.add_item(self.listbox, list_name)).grid(row=row, column=2)
-        ttk.Button(self, text="Delete", command=lambda: self.delete_item(self.listbox, list_name)).grid(row=row, column=3)
-        ttk.Button(self, text="Edit", command=lambda: self.edit_item(self.listbox, list_name)).grid(row=row, column=4)
+        ttk.Button(self, text="Delete", command=lambda: self.delete_item(self.listbox)).grid(row=row,
+                                                                                                        column=3)
+        ttk.Button(self, text="Edit", command=lambda: self.edit_item(self.listbox)).grid(row=row, column=4)
 
     def add_item(self, listbox, list_name):
         item = simpledialog.askstring("Add Item", f"Enter a new item for {list_name}:")
@@ -37,12 +36,12 @@ class PortAnalysisSettingsWindow(tk.Toplevel):
         else:
             messagebox.showerror("Invalid Input", "Please enter a valid port number (0-65535).")
 
-    def delete_item(self, listbox, list_name):
+    def delete_item(self, listbox):
         selected = listbox.curselection()
         if selected:
             listbox.delete(selected[0])
 
-    def edit_item(self, listbox, list_name):
+    def edit_item(self, listbox):
         selected = listbox.curselection()
         if selected:
             current_item = listbox.get(selected[0])

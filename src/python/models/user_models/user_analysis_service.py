@@ -1,27 +1,20 @@
 import logging
+from src.python.models.analysis_service_base import AnalysisServiceBase
 
 
-class UserAnalysisService:
-    def __init__(self, user_data, user_settings):
-        self.user_data = user_data
-        self.user_settings = user_settings
-        logging.info("UserAnalysisService initialized with user data and settings [service]")
-
-    def analyze_users(self):
+class UserAnalysisService(AnalysisServiceBase):
+    def analyze(self):
         vulnerabilities = []
-        for user in self.user_data:
+        for user in self.data:
             try:
-                # Check if user is enabled and present in settings
-                if user['Username'] in self.user_settings and user['Enabled']:
+                if user['Username'] in self.settings and user['Enabled']:
                     vulnerabilities.append(user['Username'])
             except KeyError as e:
-                # Log missing key error
                 logging.error(f"KeyError during user analysis: {e} [service]")
             except TypeError as e:
-                # Log wrong data type error
                 logging.error(f"TypeError during user analysis: {e} [service]")
             except Exception as e:
-                # Log any other unexpected exception
-                logging.exception(f"Unexpected error during user analysis for user {user.get('Username', 'Unknown')} [service]")
+                logging.exception(f"Unexpected error during user analysis for user {user.get('Username', 'Unknown')}"
+                                  f" [service]")
 
         return vulnerabilities

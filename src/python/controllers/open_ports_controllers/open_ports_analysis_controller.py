@@ -2,25 +2,19 @@ import logging
 from src.python.view.open_ports_view.open_ports_analysis_window import PortAnalysisWindow
 from src.python.models.open_ports_models.open_ports_analysis_service import PortAnalysisService
 from src.python.view.open_ports_view.open_ports_analysis_settings_window import PortAnalysisSettingsWindow
-from src.python.models.settings_manager import SettingsManager
 from tkinter import messagebox
+from src.python.controllers.base_analysis_controller import BaseAnalysisController
 
 
-class PortAnalysisController:
+class PortAnalysisController(BaseAnalysisController):
     def __init__(self, main_window):
-        self.main_window = main_window
-        self.analysis_results = []
-        self.settings_manager = SettingsManager()
+        super().__init__(main_window, 'suspicious_ports')
 
-        # Load settings
-        self.port_analysis_settings = self.settings_manager.get_setting('suspicious_ports')
-        self.settings_window = None
-
-    def perform_port_analysis(self, port_data):
+    def perform_analysis(self, port_data):
         logging.info("Attempting to analyze ports data [controller].")
         try:
-            analysis_service = PortAnalysisService(port_data, self.port_analysis_settings)
-            self.analysis_results = analysis_service.analyze_ports()
+            analysis_service = PortAnalysisService(port_data, self.analysis_settings)
+            self.analysis_results = analysis_service.analyze()
             self.main_window.enable_button(self.main_window.port_list_section[4])
             logging.info("Successfully analyzed ports data [controller].")
             return self.analysis_results
@@ -29,7 +23,7 @@ class PortAnalysisController:
             messagebox.showerror("Error", f"An error occurred while analyzing ports data: {e}")
             return None
 
-    def open_analysis_window(self):
+    def show_analysis_results(self):
         if self.analysis_results:
             try:
                 PortAnalysisWindow(self.main_window, self.analysis_results)
@@ -40,22 +34,10 @@ class PortAnalysisController:
             logging.warning("No ports analysis data available to display [controller].")
             messagebox.showinfo("User Analysis", "No port analysis data available.")
 
-    def open_ports_settings_window(self):
-        # Check if the settings window is already open
-        if not self.settings_window or not self.settings_window.winfo_exists():
-            current_settings = self.settings_manager.get_setting('suspicious_ports')
-            self.settings_window = PortAnalysisSettingsWindow(
-                self.main_window,
-                save_callback=self.save_port_analysis_settings,
-                defaults=current_settings
-            )
-            self.settings_window.grab_set()
-        else:
-            # Bring the existing settings window to focus
-            self.settings_window.focus_set()
+    def open_settings_window(self):
+        super().open_settings_window(PortAnalysisSettingsWindow, 'suspicious_ports')
 
-    def save_port_analysis_settings(self, settings):
-        # Save the updated 'default_users' settings
+    def save_analysis_settings(self, settings):
         self.settings_manager.update_setting('suspicious_ports', settings)
         self.port_analysis_settings = settings
         logging.info(f"Port analysis settings saved: {self.port_analysis_settings}")

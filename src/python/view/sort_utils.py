@@ -18,9 +18,9 @@ def sort_by(tree, column, sort_order, ascending_symbol=" ▲", descending_symbol
         try:
             # Strip non-numeric characters for numeric comparison
             numeric_part = ''.join(filter(lambda x: x.isdigit() or x == '.', item))
-            return (1, float(numeric_part))  # Numeric values as floats
+            return (1, float(numeric_part))
         except ValueError:
-            return (0, item)  # Non-numeric values as strings
+            return (0, item)
 
     data.sort(key=mixed_type_key, reverse=order)
 

@@ -6,25 +6,20 @@ import logging
 
 
 def get_installed_apps():
-    # Define the PowerShell script path
     current_dir = os.path.dirname(__file__)
     get_apps_ps_script_path = os.path.join(current_dir, '../..', '..', 'powershell', 'get_installed_apps.ps1')
     get_apps_ps_script_path = os.path.abspath(get_apps_ps_script_path)
 
-    # Read the PowerShell script content from the file
     with open(get_apps_ps_script_path, 'r') as script_file:
         script_content = script_file.read()
 
     try:
-        # Execute the PowerShell script
         result = subprocess.run(["powershell", "-ExecutionPolicy", "Bypass", "-Command", script_content],
                                 capture_output=True, text=True, check=True, encoding='utf-8')
 
-        # Check for errors
         if result.stderr:
             raise Exception(f"PowerShell script execution error: {result.stderr}")
 
-        # Process the output
         apps_data = json.loads(result.stdout)
         logging.info("Installed apps data retrieved [service]")
         return apps_data
